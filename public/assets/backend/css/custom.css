@@ -1,0 +1,313 @@
+.dropdown-item:hover{
+    color: black !important;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    min-width: 65px;
+    margin-left: .25rem;
+    margin-right: .25rem;
+}
+
+.dataTables_wrapper select {
+    padding: .4rem;
+}
+
+select.form-control, select.asColorPicker-input, .dataTables_wrapper select, .jsgrid .jsgrid-table .jsgrid-filter-row select, .select2-container--default select.select2-selection--single, .select2-container--default .select2-selection--single select.select2-search__field, select.typeahead, select.tt-query, select.tt-hint {
+    padding: .4375rem .75rem;
+    border: 0;
+    outline: 1px solid #a8a2a9;
+    color: #1f1e1e;
+}
+
+.form-control, .asColorPicker-input, .dataTables_wrapper select, .jsgrid .jsgrid-table .jsgrid-filter-row input[type=text], .jsgrid .jsgrid-table .jsgrid-filter-row select, .jsgrid .jsgrid-table .jsgrid-filter-row input[type=number], .select2-container--default .select2-selection--single, .select2-container--default .select2-selection--single .select2-search__field, .typeahead, .tt-query, .tt-hint {
+    border: 1px solid #a8a3a9;
+    font-family: "ubuntu-regular", sans-serif;
+    font-size: 0.8125rem;
+}
+
+.form-control, .asColorPicker-input, .dataTables_wrapper select, .jsgrid .jsgrid-table .jsgrid-filter-row input[type=text], .jsgrid .jsgrid-table .jsgrid-filter-row select, .jsgrid .jsgrid-table .jsgrid-filter-row input[type=number], .select2-container--default .select2-selection--single, .select2-container--default .select2-selection--single .select2-search__field, .typeahead, .tt-query, .tt-hint {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+
+.btn, .fc button, .ajax-upload-dragdrop .ajax-file-upload, .swal2-modal .swal2-buttonswrapper .swal2-styled, .swal2-modal .swal2-buttonswrapper .swal2-styled.swal2-confirm, .swal2-modal .swal2-buttonswrapper .swal2-styled.swal2-cancel, .wizard > .actions a, .btn-group.open .dropdown-toggle, .fc .open.fc-button-group .dropdown-toggle, .btn:active, .fc button:active, .ajax-upload-dragdrop .ajax-file-upload:active, .swal2-modal .swal2-buttonswrapper .swal2-styled:active, .wizard > .actions a:active, .btn:focus, .fc button:focus, .ajax-upload-dragdrop .ajax-file-upload:focus, .swal2-modal .swal2-buttonswrapper .swal2-styled:focus, .wizard > .actions a:focus, .btn:hover, .fc button:hover, .ajax-upload-dragdrop .ajax-file-upload:hover, .swal2-modal .swal2-buttonswrapper .swal2-styled:hover, .wizard > .actions a:hover, .btn:visited, .fc button:visited, .ajax-upload-dragdrop .ajax-file-upload:visited, .swal2-modal .swal2-buttonswrapper .swal2-styled:visited, .wizard > .actions a:visited, a, a:active, a:checked, a:focus, a:hover, a:visited, body, button, button:active, button:hover, button:visited, div, input, input:active, input:focus, input:hover, input:visited, select, select:active, select:focus, select:visited, textarea, textarea:active, textarea:focus, textarea:hover, textarea:visited {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+a, div, h1, h2, h3, h4, h5, p, span {
+    text-shadow: none;
+}
+
+
+.table th, .jsgrid .jsgrid-table th, .table td, .jsgrid .jsgrid-table td {
+    padding: 1rem;
+    vertical-align: top;
+    border-top: 1px solid #ebedf2;
+}
+
+.table th, .jsgrid .jsgrid-table th, .table td, .jsgrid .jsgrid-table td {
+    vertical-align: middle;
+    font-size: 0.875rem;
+    line-height: 1;
+    white-space: normal !important;
+}
+
+.dataTables_info, .dataTables_filter, .dataTables_length {
+    font-size: 0.875rem;
+}
+
+a.page-link,page-item {
+    font-size: 0.875rem;
+}
+
+.page-link{
+    font-size: 0.875rem;
+}
+
+.dataTables_length > label > .form-control.form-control-sm{
+    height: 2.3rem;
+}
+
+.dataTables_filter > label > .form-control.form-control-sm{
+    height: 2.3rem;
+}
+
+/*.profile-dropdown{*/
+    /*left: -36px;*/
+/*}*/
+
+.help-block.error-validation{
+    color: #fe7c96 !important;
+    margin-top: .5rem;
+}
+
+.form-control-danger{
+    border: 1px solid #fe7c96 !important;
+}
+
+a.btn {
+    -webkit-appearance: none;
+}
+
+.role-checker{
+    margin-left: 5%;
+}
+
+.border-top-bottom{
+    outline: thin solid #ebedf2;
+}
+
+.pull-right {
+    float: right!important;
+}
+
+.pull-left {
+    float: left!important;
+}
+
+.label{
+    white-space: nowrap;
+}
+
+.hidden{
+    display: none;
+}
+
+.table-title{
+    font-size: 1.3rem !important;
+}
+
+.navbar .navbar-brand-wrapper .navbar-brand img{
+    height: auto !important;
+}
+
+.select2-selection__rendered {
+    /*line-height: 31px !important;*/
+    box-shadow: none;
+    color: #545b62;
+    line-height: 2.6rem !important;
+}
+.select2-container .select2-selection--single {
+    height: 35px !important;
+    border-radius: 0px!important;
+    height: calc(2.8rem) !important;
+    /*outline: 1px solid #a8a2a9;*/
+    border: none;
+    box-shadow: none !important;
+    font-family: "ubuntu-regular", sans-serif;
+    font-size: 0.8125rem;
+    color: #c9c8c8;
+
+}
+
+.select2-container .select2-selection select2-selection--multiple {
+    height: 35px !important;
+    border-radius: 0px!important;
+    height: calc(2.8rem) !important;
+    /*outline: 1px solid #a8a2a9;*/
+    border: none;
+    box-shadow: none !important;
+    font-family: "ubuntu-regular", sans-serif;
+    font-size: 0.8125rem;
+    color: #c9c8c8;
+}
+
+.select2-selection__arrow {
+    height: 34px !important;
+    box-shadow: none;
+}
+
+.select2-container--bootstrap4 .select2-selection--single .select2-selection__arrow {
+    top: 0% !important;
+    box-shadow: none;
+}
+
+.select2-container--bootstrap4 .select2-selection--single .select2-selection__placeholder{
+    color: #c9c8c8 !important;
+    font-family: "ubuntu-regular", sans-serif;
+    font-size: 0.8125rem;
+    box-shadow: none;
+}
+
+.select2-container--bootstrap4 .select2-selection{
+    /*border:none !important;*/
+    border: 1px solid #a8a3a9 !important;
+    border-radius: 0px!important;
+}
+
+.select2-container--bootstrap4 .select2-selection--multiple{
+    min-height: calc(2.6rem) !important;
+    line-height: 2.6rem !important;
+}
+
+li.select2-search.select2-search--inline{
+    line-height: 1rem !important;
+}
+
+li.select2-selection__choice{
+    line-height: 2rem !important;
+}
+
+.select2-search__field{
+    box-shadow: none;
+    color: #545b62 !important;
+}
+
+.select2-search__field::placeholder{
+    color: #cecfd0;
+}
+.select2-search__field:-ms-input-placeholder {
+    color: #cecfd0;
+}
+.select2-search__field::-ms-input-placeholder {
+    color: #cecfd0;
+}
+.select2-selection__clear{
+    display: none !important;
+}
+
+.select2-container--bootstrap4 .select2-results__option--highlighted{
+    background: #b66dff!important;
+}
+
+.select2-container--bootstrap4.select2-container--disabled .select2-selection{
+    background-color: #eaeaea !important;
+}
+
+.select2-container--bootstrap4.select2-container--disabled .select2-selection{
+    background-color: #eaeaea !important;
+    cursor: default !important;
+}
+
+.disabled-readonly{
+    background-color: #eaeaea !important;
+    cursor: default !important;
+}
+
+.label-keep-all{
+    word-break: keep-all;
+}
+
+.card-numbering-rounded {
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.numbering-text-button{
+    font-weight: bold;
+    padding: 3px;
+    line-height: 10px!important;
+}
+
+.translated-result.done{
+    background-color: #ebf9f4;
+}
+
+.margin-left-right{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.status-text-card {
+    font-size: 0.8rem !important;
+}
+
+.btn-numbered{
+    background: #3b579d;
+}
+
+.stretch-card.button-filter{
+    margin-bottom: 1.5rem !important;
+}
+
+.datatable-img {
+    width: calc(260px - 120px) !important;
+    max-width: 100% !important;
+    margin: auto !important;
+    height: auto !important;
+    vertical-align: middle !important;
+}
+
+.table th img, .table td img{
+    border-radius: 0px !important;
+}
+
+.dropify-wrapper{
+    border: 1px solid #a8a2a9 !important;
+}
+
+.dropify-wrapper~.dropify-errors-container ul li {
+    margin-left: 20px;
+    font-weight:unset !important;
+    color: #fe7c96 !important;
+    margin-top: .5rem;
+    font-size: 0.875rem;
+    line-height: 1;
+    vertical-align: top;
+    margin-bottom: .5rem;
+}
+
+.dropify-wrapper.has-error{
+    border: 1px solid #fe7c96 !important;
+}
+
+.select2.form-control-danger > .select2.select2-container{
+    border: 1px solid #fe7c96 !important;
+}
+
+.select2-selection__rendered {
+    margin-left: 14px;
+}
+
+.dataTables_wrapper .dataTable .btn, .dataTables_wrapper .dataTable .fc button, .fc .dataTables_wrapper .dataTable button, .dataTables_wrapper .dataTable .ajax-upload-dragdrop .ajax-file-upload, .ajax-upload-dragdrop .dataTables_wrapper .dataTable .ajax-file-upload, .dataTables_wrapper .dataTable .swal2-modal .swal2-buttonswrapper .swal2-styled, .swal2-modal .swal2-buttonswrapper .dataTables_wrapper .dataTable .swal2-styled, .dataTables_wrapper .dataTable .wizard > .actions a, .wizard > .actions .dataTables_wrapper .dataTable a {
+    padding: 0.6rem !important;
+}
+
+.accordion.accordion-solid-header.task-description .card .card-header a {
+    padding: 1rem 0.5rem 1rem 1rem;
+    -webkit-transition: all 0.2s linear;
+    transition: all 0.2s linear;
+}
