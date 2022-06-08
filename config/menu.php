@@ -86,6 +86,29 @@ return [
             ]
         ]
     ],
+    'bunpou' => [
+        'title' => 'Bunpou',
+        'routeName' => 'bunpou.intro.index',
+        'additional_query' => '',
+        'icon' => 'mdi mdi-comment-text-outline menu-icon',
+        'sub_menu' => [
+            'intro' => [
+                'title' => 'Introduction',
+                'routeName' => 'bunpou.intro.index',
+                'icon' => 'mdi mdi-flag menu-icon',
+            ],
+            'modules' => [
+                'title' => 'Modules',
+                'routeName' => 'bunpou.module.index',
+                'icon' => 'mdi mdi-flag menu-icon',
+            ],
+            'chapters' => [
+                'title' => 'Chapters',
+                'routeName' => 'bunpou.chapter.index',
+                'icon' => 'mdi mdi-flag menu-icon',
+            ],
+        ]
+    ],
     // 'room-2' => [
     //     'title' => 'Room 2',
     //     'routeName' => 'vocabularies.index',
@@ -407,10 +430,15 @@ return [
                 'routeName' => 'permission.index',
                 'icon' => 'mdi mdi-account-settings menu-icon',
             ],
-            'master-group' => [
-                'title' => 'Master Group',
-                'routeName' => 'master-groups.index',
-                'icon' => 'mdi mdi-flag menu-icon',
+            // 'master-group' => [
+            //     'title' => 'Master Group',
+            //     'routeName' => 'master-groups.index',
+            //     'icon' => 'mdi mdi-flag menu-icon',
+            // ],
+            'room-list' => [
+                'title' => 'Room',
+                'routeName' => 'room.index',
+                'icon' => 'mdi mdi-account-multiple menu-icon',
             ],
             'setting-list' => [
                 'title' => 'Setting',

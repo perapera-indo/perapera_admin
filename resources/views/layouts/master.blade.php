@@ -171,11 +171,16 @@
                         AjaxHandler.post(
                             url,
                             data,
-                            function () {
+                            function (res) {
+                                if(res==false || res=="false"){
+                                    toastr.error( 'failed delete' );
+                                    return
+                                }
+
                                 $this.closest('tr').slideUp(500, function () {
-                                $(this).closest('tr').remove();
-                                toastr.success( 'success deleted' );
-                            })
+                                    $(this).closest('tr').remove();
+                                    toastr.success( 'success deleted' );
+                                })
                             },
                             function () {
                                 toastr.error( 'failed delete' );
@@ -251,6 +256,78 @@
                             },
                             function () {
                                 toastr.error( 'failed update' );
+                            }
+                        );
+                    },
+                    cancel: function () {
+
+                    }
+                }
+            });
+        });
+
+        $(document).on('click','.deactivateRecord',function () {
+            let $this = $(this);
+            let url = $this.attr('data-href');
+            let token = $('meta[name="csrf-token"]').attr('content');
+
+            let data = {
+                _token : token,
+                _method : 'PUT',
+                id : $this.attr('data-id'),
+            };
+
+            $.confirm({
+                title: 'Confirmation!',
+                theme: 'material',
+                content: 'Are you sure to deactivate this data ?',
+                buttons: {
+                    confirm: function () {
+                        AjaxHandler.post(
+                            url,
+                            data,
+                            function () {
+                                toastr.success( 'Deactivated Successfully' );
+                                window.location.reload();
+                            },
+                            function () {
+                                toastr.error( 'failed deactivated' );
+                            }
+                        );
+                    },
+                    cancel: function () {
+
+                    }
+                }
+            });
+        });
+
+        $(document).on('click','.activateRecord',function () {
+            let $this = $(this);
+            let url = $this.attr('data-href');
+            let token = $('meta[name="csrf-token"]').attr('content');
+
+            let data = {
+                _token : token,
+                _method : 'PUT',
+                id : $this.attr('data-id'),
+            };
+
+            $.confirm({
+                title: 'Confirmation!',
+                theme: 'material',
+                content: 'Are you sure to activate this data ?',
+                buttons: {
+                    confirm: function () {
+                        AjaxHandler.post(
+                            url,
+                            data,
+                            function () {
+                                toastr.success( 'Activated Successfully' );
+                                window.location.reload();
+                            },
+                            function () {
+                                toastr.error( 'failed Activated' );
                             }
                         );
                     },

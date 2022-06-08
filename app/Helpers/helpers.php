@@ -677,7 +677,7 @@ if (! function_exists('upload_file')) {
     {
         if (!empty($data) && $data->isValid()) {
             $fileExtension = strtolower($data->getClientOriginalExtension());
-            $newFilename = str_random(20) . '.' . $fileExtension;
+            $newFilename = Str::random(20) . '.' . $fileExtension;
 
             if (!File::exists($filepath)) {
                 File::makeDirectory($filepath, $mode = 0777, true, true);
@@ -690,6 +690,8 @@ if (! function_exists('upload_file')) {
                  $imageThumbnail = image_thumbnail($filepath.$newFilename);
             } else {
                 $file = $data->move($filepath, $newFilename);
+                $compressedImage = "";
+                $imageThumbnail = "";
             }
             $result['original'] = $filepath.$newFilename;
              $result['compressed'] = $compressedImage;

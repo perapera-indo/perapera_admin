@@ -1,3 +1,32 @@
+@if( isset( $link_url ) )
+    <a href="{!! empty( $link_url ) ? 'javascript:void(0)' : $link_url !!}" title="Open Link" target="_blank">
+        @if (isset( $link_text ))
+            {{ $link_text }}
+        @endif
+    </a>
+@endif
+
+@if( isset( $deactivate_record ) && $deactivate_record!="" )
+    <a href="javascript:void(0)" class="deactivateRecord btn btn-warning btn-xs {!! empty( $deactivate_record ) ? 'disabled' : '' !!}" title="Deactivate" data-toggle="tooltip" data-original-title="Deactivate" data-href="{!! empty( $deactivate_record ) ? 'javascript:void(0)' : $deactivate_record !!}" data-button="Deactivate">
+        <i class="material-icons">close</i>
+    </a>
+@endif
+
+@if( isset( $activate_record ) && $activate_record!="" )
+    <a href="javascript:void(0)" class="activateRecord btn btn-info btn-xs {!! empty( $activate_record ) ? 'disabled' : '' !!}" title="Activate" data-toggle="tooltip" data-original-title="Activate" data-href="{!! empty( $activate_record ) ? 'javascript:void(0)' : $activate_record !!}" data-button="Activate">
+        <i class="material-icons">check</i>
+    </a>
+@endif
+
+
+
+
+
+
+
+
+
+
 @if( isset( $create_url ) )
 
     <a href="{!! empty( $create_url ) ? 'javascript:void(0)' : $create_url !!}" class="btn btn-primary btn-xs {!! empty( $create_url ) ? 'disabled' : '' !!}" title="Create" data-button="create">
@@ -189,7 +218,7 @@
 @endif
 
 @if( isset( $download_url ) )
-    <a href="{!! empty( $download_url ) ? 'javascript:void(0)' : $download_url !!}" class="btn btn-primary btn-xs {!! empty( $download_url ) ? 'disabled' : '' !!}" title="Download" data-button="Download">
+    <a href="{!! empty( $download_url ) ? 'javascript:void(0)' : $download_url !!}" class="btn btn-primary btn-xs {!! empty( $download_url ) ? 'disabled' : '' !!}" title="Download" data-button="Download" {!! isset($download_blank) && $download_blank==true ? 'target="_blank"' : '' !!}>
         <i class="material-icons">cloud_download</i>
     </a>
 @endif
@@ -203,5 +232,14 @@
 @if (isset( $done_finance_url ))
     <a href="javascript:void(0)" id="doneDataFinance" class="doneDataFinance btn btn-success btn-xs {!! empty( $done_finance_url ) ? 'disabled' : '' !!}" title="Done" data-toggle="tooltip" data-original-title="Done" data-href="{!! empty( $done_finance_url ) ? 'javascript:void(0)' : $done_finance_url !!}" data-button="done">
         <i class="material-icons">check</i>
+    </a>
+@endif
+
+
+
+
+@if( isset( $manage_test_url ) )
+    <a href="{!! empty( $manage_test_url ) ? 'javascript:void(0)' : $manage_test_url !!}" class="btn btn-primary btn-xs {!! empty( $manage_test_url ) ? 'disabled' : '' !!}" title="Manage Test" data-toggle="tooltip" data-original-title="Manage Test" data-button="Manage Test">
+        <i class="material-icons">quiz</i>
     </a>
 @endif
