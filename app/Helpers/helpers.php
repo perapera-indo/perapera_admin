@@ -200,17 +200,23 @@ if (! function_exists('setMenuActive')) {
 }
 
 if (! function_exists('flashDataAfterSave')) {
-    function flashDataAfterSave($savedData,$name)
+    function flashDataAfterSave($savedData,$name,$text="")
     {
         $message = 'insert new';
         if(request()->isMethod('PUT')){
             $message = 'update';
         }
+
+        $text = $text=="" ? (object)["success"=>"","error"=>""] : $text;
+
         if (!empty($savedData)) {
-            request()->session()->flash('success', 'Success '.$message.' data '.$name.'!');
+            $message = $text->success=="" ? 'Success '.$message.' data '.$name.'!' : $text->success;
+            $status = 'success';
         } else {
-            request()->session()->flash('error', 'Failed '.$message.' data '.$name.'!');
+            $message = $text->error=="" ? 'Failed '.$message.' data '.$name.'!' : $text->error;
+            $status = 'error';
         }
+        request()->session()->flash($status, $message);
     }
 }
 
@@ -677,7 +683,7 @@ if (! function_exists('upload_file')) {
     {
         if (!empty($data) && $data->isValid()) {
             $fileExtension = strtolower($data->getClientOriginalExtension());
-            $newFilename = Str::random(20) . '.' . $fileExtension;
+            $newFilename = uniqid(Str::random(20)) . '.' . $fileExtension;
 
             if (!File::exists($filepath)) {
                 File::makeDirectory($filepath, $mode = 0777, true, true);
@@ -693,9 +699,10 @@ if (! function_exists('upload_file')) {
                 $compressedImage = "";
                 $imageThumbnail = "";
             }
+
             $result['original'] = $filepath.$newFilename;
-             $result['compressed'] = $compressedImage;
-             $result['thumbnail'] = $imageThumbnail;
+            $result['compressed'] = $compressedImage;
+            $result['thumbnail'] = $imageThumbnail;
 
             return  $result;
         }

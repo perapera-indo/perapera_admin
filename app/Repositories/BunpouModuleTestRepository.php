@@ -10,7 +10,7 @@ class BunpouModuleTestRepository
     {
         $test = new BunpouModuleTest();
 
-        $test->name = $data['name'];
+        $test->title = $data['title'];
         $test->module = $data['module'];
         $test->order = $data['order'];
         $test->time = $data['time'];
@@ -25,8 +25,8 @@ class BunpouModuleTestRepository
     {
         $test = BunpouModuleTest::find($id);
 
-        if(array_key_exists("name",$data)){
-            $test->name = $data['name'];
+        if(array_key_exists("title",$data)){
+            $test->title = $data['title'];
         }
 
         if(array_key_exists("is_active",$data)){
@@ -35,6 +35,14 @@ class BunpouModuleTestRepository
 
         if(array_key_exists("order",$data)){
             $test->order = $data['order'];
+        }
+
+        if(array_key_exists("time",$data)){
+            $test->time = $data['time'];
+        }
+
+        if(array_key_exists("module",$data)){
+            $test->module = $data['module'];
         }
 
         return $test->update();

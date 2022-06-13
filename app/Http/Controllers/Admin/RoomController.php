@@ -117,6 +117,6 @@ class RoomController extends Controller
      */
     public function destroy($id)
     {
-        $this->repository->delete($id);
+        return $this->repository->delete($id);
     }
 }

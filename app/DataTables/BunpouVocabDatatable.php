@@ -2,14 +2,14 @@
 
 namespace App\DataTables;
 
-use App\Models\BunpouModuleTest;
+use App\Models\BunpouVocab;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 // use DB;
 
-class BunpouModuleTestDatatable extends DataTable
+class BunpouVocabDatatable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -23,51 +23,42 @@ class BunpouModuleTestDatatable extends DataTable
 
         return datatables()
             ->eloquent($query)
-            ->addColumn('action', function($test){
-                $__route_name = 'bunpou.module.test.edit';
-                $__route_name_delete = 'bunpou.module.test.destroy';
-                $edit_url = route($__route_name, $test->id);
-                $delete_url = route($__route_name_delete, $test->id);
+            ->addColumn('action', function($intro){
+                $__route_name_delete = 'bunpou.vocabulary.destroy';
+                $delete_url = route($__route_name_delete, $intro->id);
 
-                $deactivate_record = ($test->is_active==true)? route("bunpou.module.test.deactivate",$test->id) : "";
-
-                $activate_record = ($test->is_active==true)? "" : route("bunpou.module.test.activate",$test->id);
+                $__route_name = 'bunpou.vocabulary.edit';
+                $edit_url = route($__route_name, $intro->id);
 
                 return view('partials.action-button')->with(
-                    compact('edit_url','delete_url','__route_name','__route_name_delete', 'activate_record', 'deactivate_record')
+                    compact('delete_url','__route_name_delete', '__route_name','edit_url',)
                 );
             })
-            ->editColumn('rownum', function ($test) use ($start) {
-                return $test->rownum+$start;
-            })
-            ->editColumn('is_active', function ($data) {
-                return view('partials.active')->with(
-                    compact('data')
-                );
+            ->editColumn('rownum', function ($intro) use ($start) {
+                return $intro->rownum+$start;
             });
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\BunpouModuleTest $model
+     * @param \App\BunpouVocab $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(BunpouModuleTest $model)
+    public function query(BunpouVocab $model)
     {
         // DB::statement(DB::raw('set @rownum=0'));
         $query = $model->newQuery()
             ->select([
                 'id',
-                'title',
-                'module',
-                'time',
-                'question_count',
-                'order',
+                'word_jpn',
+                'word_romaji',
+                'word_idn',
                 'is_active',
+                'chapter',
+                'order',
                 DB::raw('row_number() over () AS rownum'),
-            ])
-            ->where("module",$this->request->module);
+            ]);
 
         return $query;
     }
@@ -89,7 +80,7 @@ class BunpouModuleTestDatatable extends DataTable
                     ->processing(true)
                     ->serverSide(true)
                     ->autoWidth(false)
-                    // ->stateSave(true)
+//                    ->stateSave(true)
                     ->buttons(
                         Button::make('create'),
                         Button::make('export'),
@@ -111,31 +102,25 @@ class BunpouModuleTestDatatable extends DataTable
             Column::make('rownum')
                 ->title('#')
                 ->searchable(false)
-                ->addClass('text-center')
-                ->width("5%"),
-            Column::make('title')
-                ->name('title')
-                ->title('Title'),
-            Column::make('time')
-                ->name('time')
-                ->title('Time')
-                ->width("10%")
+                ->width("5%")
+                ->addClass('text-center'),
+            Column::make('word_jpn')
+                ->name('word_jpn')
+                ->title('Kata Jepang')
+                ->addClass('text-center'),
+            Column::make('word_romaji')
+                ->name('word_romaji')
+                ->title('Kata Romaji')
+                ->addClass('text-center'),
+            Column::make('word_idn')
+                ->name('word_idn')
+                ->title('Kata Indonesia')
                 ->addClass('text-center'),
             Column::make('order')
                 ->name('order')
                 ->title('Order')
                 ->width("10%")
                 ->addClass('text-center'),
-            Column::make('question_count')
-                ->name('question_count')
-                ->title('Question Count')
-                ->width("15%")
-                ->addClass('text-center'),
-            Column::make('is_active')
-                ->name('is_active')
-                ->title('Status')
-                ->addClass('text-center')
-                ->width("10%"),
             Column::computed('action')
                 ->searchable(false)
                 ->visible($hasAction)

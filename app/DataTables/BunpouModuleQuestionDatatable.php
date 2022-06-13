@@ -2,14 +2,14 @@
 
 namespace App\DataTables;
 
-use App\Models\BunpouModuleTest;
+use App\Models\BunpouModuleQuestion;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 // use DB;
 
-class BunpouModuleTestDatatable extends DataTable
+class BunpouModuleQuestionDatatable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -23,26 +23,47 @@ class BunpouModuleTestDatatable extends DataTable
 
         return datatables()
             ->eloquent($query)
-            ->addColumn('action', function($test){
-                $__route_name = 'bunpou.module.test.edit';
-                $__route_name_delete = 'bunpou.module.test.destroy';
-                $edit_url = route($__route_name, $test->id);
-                $delete_url = route($__route_name_delete, $test->id);
-
-                $deactivate_record = ($test->is_active==true)? route("bunpou.module.test.deactivate",$test->id) : "";
-
-                $activate_record = ($test->is_active==true)? "" : route("bunpou.module.test.activate",$test->id);
+            ->addColumn('action', function($question){
+                $__route_name = 'bunpou.module.question.edit';
+                $__route_name_delete = 'bunpou.module.question.destroy';
+                $edit_url = route($__route_name, $question->id);
+                $delete_url = route($__route_name_delete, $question->id);
 
                 return view('partials.action-button')->with(
-                    compact('edit_url','delete_url','__route_name','__route_name_delete', 'activate_record', 'deactivate_record')
+                    compact('edit_url','delete_url','__route_name','__route_name_delete')
                 );
             })
-            ->editColumn('rownum', function ($test) use ($start) {
-                return $test->rownum+$start;
+            ->editColumn('rownum', function ($question) use ($start) {
+                return $question->rownum+$start;
             })
-            ->editColumn('is_active', function ($data) {
-                return view('partials.active')->with(
-                    compact('data')
+            ->editColumn('image', function ($question) {
+                if(empty($question->image)){
+                    $color = "secondary";
+                    $text = "No Image Uploaded";
+                    return view('partials.badge')->with(
+                        compact('color','text')
+                    );
+                }
+
+                $download_url = asset($question->image);
+                $download_blank = true;
+                return view('partials.action-button')->with(
+                    compact('download_url','download_blank')
+                );
+            })
+            ->editColumn('audio', function ($question) {
+                if(empty($question->audio)){
+                    $color = "secondary";
+                    $text = "No Audio Uploaded";
+                    return view('partials.badge')->with(
+                        compact('color','text')
+                    );
+                }
+
+                $download_url = asset($question->audio);
+                $download_blank = true;
+                return view('partials.action-button')->with(
+                    compact('download_url','download_blank')
                 );
             });
     }
@@ -50,24 +71,24 @@ class BunpouModuleTestDatatable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\BunpouModuleTest $model
+     * @param \App\BunpouModuleQuestion $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(BunpouModuleTest $model)
+    public function query(BunpouModuleQuestion $model)
     {
         // DB::statement(DB::raw('set @rownum=0'));
         $query = $model->newQuery()
             ->select([
                 'id',
-                'title',
-                'module',
-                'time',
-                'question_count',
+                'question',
+                'image',
+                'audio',
+                'test',
                 'order',
                 'is_active',
                 DB::raw('row_number() over () AS rownum'),
             ])
-            ->where("module",$this->request->module);
+            ->where("test",$this->request->test);
 
         return $query;
     }
@@ -113,29 +134,30 @@ class BunpouModuleTestDatatable extends DataTable
                 ->searchable(false)
                 ->addClass('text-center')
                 ->width("5%"),
-            Column::make('title')
-                ->name('title')
-                ->title('Title'),
-            Column::make('time')
-                ->name('time')
-                ->title('Time')
-                ->width("10%")
-                ->addClass('text-center'),
+            Column::make('question')
+                ->name('question')
+                ->title('Question'),
             Column::make('order')
                 ->name('order')
                 ->title('Order')
                 ->width("10%")
                 ->addClass('text-center'),
-            Column::make('question_count')
-                ->name('question_count')
-                ->title('Question Count')
-                ->width("15%")
-                ->addClass('text-center'),
-            Column::make('is_active')
-                ->name('is_active')
-                ->title('Status')
+            Column::make('image')
+                ->name('image')
+                ->title('Image')
+                ->width("10%")
                 ->addClass('text-center')
-                ->width("10%"),
+                ->searchable(false)
+                ->exportable(false)
+                ->printable(true),
+            Column::make('audio')
+                ->name('audio')
+                ->title('Audio')
+                ->width("10%")
+                ->addClass('text-center')
+                ->searchable(false)
+                ->exportable(false)
+                ->printable(true),
             Column::computed('action')
                 ->searchable(false)
                 ->visible($hasAction)

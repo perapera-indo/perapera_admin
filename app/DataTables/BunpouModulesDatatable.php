@@ -28,22 +28,21 @@ class BunpouModulesDatatable extends DataTable
                 $__route_name_delete = 'bunpou.module.destroy';
                 $edit_url = route($__route_name, $module->id);
                 $delete_url = route($__route_name_delete, $module->id);
-                $manage_test_url = route("bunpou.module.test.index",["id"=>$module->id]);
 
                 $deactivate_record = ($module->is_active==true)? route("bunpou.module.deactivate",$module->id) : "";
 
                 $activate_record = ($module->is_active==true)? "" : route("bunpou.module.activate",$module->id);
 
                 return view('partials.action-button')->with(
-                    compact('edit_url','delete_url','__route_name','__route_name_delete', 'manage_test_url', 'activate_record', 'deactivate_record')
+                    compact('edit_url','delete_url','__route_name','__route_name_delete', 'activate_record', 'deactivate_record')
                 );
             })
             ->editColumn('rownum', function ($module) use ($start) {
                 return $module->rownum+$start;
             })
-            ->editColumn('is_active', function ($module) {
-                return view('backend.bunpou.module.active')->with(
-                    compact('module')
+            ->editColumn('is_active', function ($data) {
+                return view('partials.active')->with(
+                    compact('data')
                 );
             });
     }
@@ -116,13 +115,13 @@ class BunpouModulesDatatable extends DataTable
             Column::make('order')
                 ->name('order')
                 ->title('Order')
-                ->width("5%")
+                ->width("10%")
                 ->addClass('text-center'),
             Column::make('is_active')
                 ->name('is_active')
                 ->title('Status')
                 ->addClass('text-center')
-                ->width("15%"),
+                ->width("10%"),
             Column::computed('action')
                 ->searchable(false)
                 ->visible($hasAction)

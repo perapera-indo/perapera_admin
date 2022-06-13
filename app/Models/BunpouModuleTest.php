@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BunpouModuleTest extends Model
 {
-    protected $table = 'bunpou_module_test';
+    protected $table = 'bunpou_module_tests';
     protected $guarded = ['id'];
 
     public function data($param1=null,$param2=null,$param3=null)
@@ -40,5 +40,9 @@ class BunpouModuleTest extends Model
         }
 
         return $data;
+    }
+
+    public function isActive(){
+        return BunpouModuleTest::where("is_active",true)->orderBy("order","asc");
     }
 }

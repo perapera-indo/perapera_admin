@@ -3,22 +3,24 @@
 namespace App\Http\Controllers\Admin\Bunpou;
 
 use App\Http\Requests\BunpouModuleTestRequest;
+use App\Models\BunpouModuleTest;
 use App\Models\BunpouModules;
-use App\Models\BunpouChapters;
-use App\Repositories\BunpouModulesRepository;
+use App\Models\BunpouModuleQuestion;
+use App\Repositories\BunpouModuleTestRepository;
 use App\Http\Controllers\Controller;
 use App\DataTables\BunpouModuleTestDatatable;
 
 class BunpouModuleTestController extends Controller
 {
 
-    protected $model, $repository, $chapter;
+    protected $model, $repository, $question, $module;
 
     public function __construct()
     {
-        $this->model = new BunpouModules();
-        $this->chapter = new BunpouChapters();
-        $this->repository = new BunpouModulesRepository();
+        $this->model = new BunpouModuleTest();
+        $this->module = new BunpouModules();
+        $this->question = new BunpouModuleQuestion();
+        $this->repository = new BunpouModuleTestRepository();
     }
 
     protected $redirectAfterSave = 'bunpou.module.test.index';
@@ -35,9 +37,10 @@ class BunpouModuleTestController extends Controller
             return redirect()->route("bunpou.module.index");
         }
 
-        $data = $this->model->data($module)->firstOrFail();
+        $data = $this->module->data($module)->firstOrFail();
+        $modules = $this->module->isActive()->get();
 
-        return $dataTable->render('backend.bunpou.module.test.index',compact("data"));
+        return $dataTable->render('backend.bunpou.module.test.index',compact("data","modules"));
     }
 
     /**
@@ -50,7 +53,7 @@ class BunpouModuleTestController extends Controller
         if($module==null){
             return redirect()->route("bunpou.module.index");
         }
-        $module = $this->model->data($module)->firstOrFail();
+        $module = $this->module->data($module)->firstOrFail();
         return view('backend.bunpou.module.test.form',compact("module"));
     }
 
@@ -60,18 +63,14 @@ class BunpouModuleTestController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(BunpouModuleTestRequest $request, $module=null)
+    public function store(BunpouModuleTestRequest $request)
     {
-        if($module==null){
-            return redirect()->route("bunpou.module.index");
-        }
-        $module = $this->model->data($module)->firstOrFail();
-
+        $module = $this->module->data($request->module)->firstOrFail();
         $param = $request->all();
         $saveData = $this->repository->create($param);
         flashDataAfterSave($saveData,$this->moduleName);
 
-        return redirect()->route($this->redirectAfterSave,$module);
+        return redirect()->route($this->redirectAfterSave,$module->id);
 
     }
 
@@ -99,8 +98,9 @@ class BunpouModuleTestController extends Controller
     {
 
         $data = $this->model->data($id)->firstOrFail();
+        $module = $this->module->data($data->module)->firstOrFail();
 
-        return view('backend.bunpou.module.form', compact('data'));
+        return view('backend.bunpou.module.test.form', compact('data','module'));
     }
 
     /**
@@ -112,11 +112,12 @@ class BunpouModuleTestController extends Controller
      */
     public function update(BunpouModuleTestRequest $request, $id)
     {
+        $module = $this->module->data($request->module)->firstOrFail();
         $param = $request->all();
         $saveData = $this->repository->update($param, $id);
         flashDataAfterSave($saveData,$this->moduleName);
 
-        return redirect()->route($this->redirectAfterSave);
+        return redirect()->route($this->redirectAfterSave,$module->id);
     }
 
     /**
@@ -127,11 +128,26 @@ class BunpouModuleTestController extends Controller
      */
     public function destroy($id)
     {
-        $chapter = $this->chapter->data("module",$id)->first();
-        if($chapter!=null){
+        $question = $this->question->data("test",$id)->first();
+        if($question!=null){
             return "false";
         }
 
         return $this->repository->delete($id);
+    }
+
+    public function activate($id)
+    {
+        return $this->repository->activate($id);
+    }
+
+    public function deactivate($id)
+    {
+        return $this->repository->deactivate($id);
+    }
+
+    public function redirect(){
+        $module = $this->module->isActive()->firstOrFail();
+        return redirect()->route($this->redirectAfterSave,$module->id);
     }
 }

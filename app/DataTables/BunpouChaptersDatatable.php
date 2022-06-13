@@ -40,17 +40,9 @@ class BunpouChaptersDatatable extends DataTable
             ->editColumn('rownum', function ($chapter) use ($start) {
                 return $chapter->rownum+$start;
             })
-            ->editColumn('is_active', function ($chapter) {
-                return view('backend.bunpou.chapter.active')->with(
-                    compact('chapter')
-                );
-            })
-            ->editColumn('moduleName', function ($chapter) {
-                $link_url = route("bunpou.module.show",$chapter->module);
-                $link_text = $chapter->moduleName;
-
-                return view('partials.action-button')->with(
-                    compact('link_url','link_text',)
+            ->editColumn('is_active', function ($data) {
+                return view('partials.active')->with(
+                    compact('data')
                 );
             });
     }
@@ -65,16 +57,15 @@ class BunpouChaptersDatatable extends DataTable
     {
         // DB::statement(DB::raw('set @rownum=0'));
         $query = $model->newQuery()
-            ->join("bunpou_modules","bunpou_modules.id","=","bunpou_chapters.module")
             ->select([
-                'bunpou_chapters.id',
-                'bunpou_chapters.name',
-                'bunpou_chapters.order',
-                'bunpou_chapters.module',
-                'bunpou_chapters.is_active',
-                'bunpou_modules.name as moduleName',
+                'id',
+                'name',
+                'order',
+                'module',
+                'is_active',
                 DB::raw('row_number() over () AS rownum'),
-            ]);
+            ])
+            ->where("module",$this->request->module);
 
         return $query;
     }
@@ -123,13 +114,10 @@ class BunpouChaptersDatatable extends DataTable
             Column::make('name')
                 ->name('name')
                 ->title('Name'),
-            Column::make('moduleName')
-                ->name('bunpou_modules.name')
-                ->title('Module'),
             Column::make('order')
                 ->name('order')
                 ->title('Order')
-                ->width("5%")
+                ->width("10%")
                 ->addClass('text-center'),
             Column::make('is_active')
                 ->name('is_active')

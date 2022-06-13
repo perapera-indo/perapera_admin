@@ -19,20 +19,25 @@
                             <input type="hidden" name="_method" value="put">
                         @endif
 
-                        <div class="form-group">
-                            <label for="name">Module Name</label>
-                            <input type="text" class="form-control {{ hasErrorField($errors,'name') }}"
-                                   id="name" name="name" value="{{ old('name',@$data->name) }}"
-                                   placeholder="Module Name" required>
-                            {!! $errors->first('name', '<label class="help-block error-validation">:message</label>') !!}
-                        </div>
-
-                        <div class="form-group">
-                            <label for="order">Order</label>
-                            <input type="number" class="form-control {{ hasErrorField($errors,'order') }}"
-                                   id="order" name="order" value="{{ old('order',@$data->order) }}"
-                                   placeholder="Order" min="1" required>
-                            {!! $errors->first('order', '<label class="help-block error-validation">:message</label>') !!}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="name">Module Name</label>
+                                    <input type="text" class="form-control {{ hasErrorField($errors,'name') }}"
+                                           id="name" name="name" value="{{ old('name',@$data->name) }}"
+                                           placeholder="Module Name" required>
+                                    {!! $errors->first('name', '<label class="help-block error-validation">:message</label>') !!}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="order">Order</label>
+                                    <input type="number" class="form-control {{ hasErrorField($errors,'order') }}"
+                                           id="order" name="order" value="{{ old('order',@$data->order) }}"
+                                           placeholder="Order" min="1" required>
+                                    {!! $errors->first('order', '<label class="help-block error-validation">:message</label>') !!}
+                                </div>
+                            </div>
                         </div>
 
                         <button type="submit" class="btn btn-info btn-fw btn-lg mr-2">Submit</button>

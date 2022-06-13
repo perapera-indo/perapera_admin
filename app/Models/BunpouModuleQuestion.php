@@ -3,18 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
-class BunpouModules extends Model
+class BunpouModuleQuestion extends Model
 {
-    protected $table = 'bunpou_modules';
+    protected $table = 'bunpou_module_questions';
     protected $guarded = ['id'];
 
     public function data($param1=null,$param2=null,$param3=null)
     {
-        $data = BunpouModules::select([
+        $data = BunpouModuleQuestion::select([
             'id',
-            'name',
+            'question',
+            'image',
+            'audio',
+            'test',
             'order',
             'is_active',
         ]);
@@ -38,37 +40,5 @@ class BunpouModules extends Model
         }
 
         return $data;
-    }
-
-    public function isActive(){
-        return BunpouModules::where("is_active",true)->orderBy("order","asc");
-    }
-
-    public function withTestCount(){
-        return BunpouModules::
-            select(DB::raw("(
-                SELECT id FROM bunpou_module_tests
-                WHERE bunpou_module_tests.module = bunpou_modules.id
-                    AND bunpou_module_tests.is_active = true
-                LIMIT 1 OFFSET 0
-                ) AS test_count,
-                *"))
-            ->where("is_active",true)
-            ->orderBy("order","asc")
-            ->get();
-    }
-
-    public function withChapterCount(){
-        return BunpouModules::
-            select(DB::raw("(
-                SELECT id FROM bunpou_chapters
-                WHERE bunpou_chapters.module = bunpou_modules.id
-                    AND bunpou_chapters.is_active = true
-                LIMIT 1 OFFSET 0
-                ) AS test_count,
-                *"))
-            ->where("is_active",true)
-            ->orderBy("order","asc")
-            ->get();
     }
 }

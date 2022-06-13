@@ -3,20 +3,22 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
-class BunpouModules extends Model
+class BunpouVocab extends Model
 {
-    protected $table = 'bunpou_modules';
+    protected $table = 'bunpou_vocab';
     protected $guarded = ['id'];
 
     public function data($param1=null,$param2=null,$param3=null)
     {
-        $data = BunpouModules::select([
+        $data = BunpouVocab::select([
             'id',
-            'name',
-            'order',
+            'word_jpn',
+            'word_romaji',
+            'word_idn',
             'is_active',
+            'chapter',
+            'order',
         ]);
 
         if(is_string($param1) && $param2=="equal" && is_array($param3)){
@@ -38,37 +40,5 @@ class BunpouModules extends Model
         }
 
         return $data;
-    }
-
-    public function isActive(){
-        return BunpouModules::where("is_active",true)->orderBy("order","asc");
-    }
-
-    public function withTestCount(){
-        return BunpouModules::
-            select(DB::raw("(
-                SELECT id FROM bunpou_module_tests
-                WHERE bunpou_module_tests.module = bunpou_modules.id
-                    AND bunpou_module_tests.is_active = true
-                LIMIT 1 OFFSET 0
-                ) AS test_count,
-                *"))
-            ->where("is_active",true)
-            ->orderBy("order","asc")
-            ->get();
-    }
-
-    public function withChapterCount(){
-        return BunpouModules::
-            select(DB::raw("(
-                SELECT id FROM bunpou_chapters
-                WHERE bunpou_chapters.module = bunpou_modules.id
-                    AND bunpou_chapters.is_active = true
-                LIMIT 1 OFFSET 0
-                ) AS test_count,
-                *"))
-            ->where("is_active",true)
-            ->orderBy("order","asc")
-            ->get();
     }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
-class BunpouModuleTestRequest extends FormRequest
+class BunpouModuleQuestionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,9 +25,7 @@ class BunpouModuleTestRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required',
-            'module' => 'required',
-            'time' => 'required',
+            'question' => 'required',
         ];
     }
 

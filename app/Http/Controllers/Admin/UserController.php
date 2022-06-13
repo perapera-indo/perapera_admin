@@ -117,6 +117,6 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $this->repository->deleteUser($id);
+        return $this->repository->deleteUser($id);
     }
 }

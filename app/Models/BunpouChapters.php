@@ -39,4 +39,8 @@ class BunpouChapters extends Model
 
         return $data;
     }
+
+    public function isActive(){
+        return BunpouChapters::where("is_active",true)->orderBy("order","asc");
+    }
 }

@@ -239,7 +239,10 @@
 
 
 @if( isset( $manage_test_url ) )
-    <a href="{!! empty( $manage_test_url ) ? 'javascript:void(0)' : $manage_test_url !!}" class="btn btn-primary btn-xs {!! empty( $manage_test_url ) ? 'disabled' : '' !!}" title="Manage Test" data-toggle="tooltip" data-original-title="Manage Test" data-button="Manage Test">
+    @php
+        $manage_test_text = isset($manage_test_text) && $manage_test_text!="" ? $manage_test_text : 'Manage Test';
+    @endphp
+    <a href="{!! empty( $manage_test_url ) ? 'javascript:void(0)' : $manage_test_url !!}" class="btn btn-primary btn-xs {!! empty( $manage_test_url ) ? 'disabled' : '' !!}" title="{{ $manage_test_text }}" data-toggle="tooltip" data-original-title="{{ $manage_test_text }}" data-button="{{ $manage_test_text }}">
         <i class="material-icons">quiz</i>
     </a>
 @endif

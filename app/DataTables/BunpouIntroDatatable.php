@@ -116,7 +116,7 @@ class BunpouIntroDatatable extends DataTable
             Column::make('page')
                 ->name('page')
                 ->title('Page')
-                ->width("5%")
+                ->width("10%")
                 ->addClass('text-center'),
             Column::computed('action')
                 ->searchable(false)

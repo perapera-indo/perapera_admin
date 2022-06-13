@@ -29,9 +29,15 @@ class BunpouChaptersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(BunpouChaptersDatatable $dataTable)
+    public function index(BunpouChaptersDatatable $dataTable, $module=null)
     {
-        return $dataTable->render('backend.bunpou.chapter.index');
+        if($module==null){
+            return redirect()->route("bunpou.module.index");
+        }
+
+        $data = $this->module->data($module)->firstOrFail();
+        $modules = $this->module->isActive()->get();
+        return $dataTable->render('backend.bunpou.chapter.index',compact("data","modules"));
     }
 
     /**
@@ -39,10 +45,13 @@ class BunpouChaptersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($module=null)
     {
-        $modules = $this->module->data("is_active",true)->get();
-        return view('backend.bunpou.chapter.form',compact("modules"));
+        if($module==null){
+            return redirect()->route("bunpou.module.index");
+        }
+        $module = $this->module->data($module)->firstOrFail();
+        return view('backend.bunpou.chapter.form',compact("module"));
     }
 
     /**
@@ -53,11 +62,12 @@ class BunpouChaptersController extends Controller
      */
     public function store(BunpouChaptersRequest $request)
     {
+        $module = $this->module->data($request->module)->firstOrFail();
         $param = $request->all();
         $saveData = $this->repository->create($param);
         flashDataAfterSave($saveData,$this->moduleName);
 
-        return redirect()->route($this->redirectAfterSave);
+        return redirect()->route($this->redirectAfterSave,$module->id);
 
     }
 
@@ -81,9 +91,9 @@ class BunpouChaptersController extends Controller
     {
 
         $data = $this->model->data($id)->firstOrFail();
-        $modules = $this->module->data("is_active",true)->get();
+        $module = $this->module->data($data->module)->firstOrFail();
 
-        return view('backend.bunpou.chapter.form', compact('data','modules'));
+        return view('backend.bunpou.chapter.form', compact('data','module'));
     }
 
     /**
@@ -95,11 +105,12 @@ class BunpouChaptersController extends Controller
      */
     public function update(BunpouChaptersRequest $request, $id)
     {
+        $module = $this->module->data($request->module)->firstOrFail();
         $param = $request->all();
         $saveData = $this->repository->update($param, $id);
         flashDataAfterSave($saveData,$this->moduleName);
 
-        return redirect()->route($this->redirectAfterSave);
+        return redirect()->route($this->redirectAfterSave,$module->id);
     }
 
     /**
@@ -110,7 +121,7 @@ class BunpouChaptersController extends Controller
      */
     public function destroy($id)
     {
-        $this->repository->delete($id);
+        return $this->repository->delete($id);
     }
 
     public function activate($id)
@@ -121,5 +132,10 @@ class BunpouChaptersController extends Controller
     public function deactivate($id)
     {
         return $this->repository->deactivate($id);
+    }
+
+    public function redirect(){
+        $module = $this->module->isActive()->firstOrFail();
+        return redirect()->route($this->redirectAfterSave,$module->id);
     }
 }

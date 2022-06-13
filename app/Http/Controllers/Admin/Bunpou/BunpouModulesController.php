@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Bunpou;
 use App\Http\Requests\BunpouModulesRequest;
 use App\Models\BunpouModules;
 use App\Models\BunpouChapters;
+use App\Models\BunpouModuleTest;
 use App\Repositories\BunpouModulesRepository;
 use App\Http\Controllers\Controller;
 use App\DataTables\BunpouModulesDatatable;
@@ -12,12 +13,13 @@ use App\DataTables\BunpouModulesDatatable;
 class BunpouModulesController extends Controller
 {
 
-    protected $model, $repository, $chapter;
+    protected $model, $repository, $chapter, $test;
 
     public function __construct()
     {
         $this->model = new BunpouModules();
         $this->chapter = new BunpouChapters();
+        $this->test = new BunpouModuleTest();
         $this->repository = new BunpouModulesRepository();
     }
 
@@ -114,6 +116,11 @@ class BunpouModulesController extends Controller
     {
         $chapter = $this->chapter->data("module",$id)->first();
         if($chapter!=null){
+            return "false";
+        }
+
+        $test = $this->test->data("module",$id)->first();
+        if($test!=null){
             return "false";
         }
 

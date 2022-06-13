@@ -2,36 +2,57 @@
 
 namespace App\Http\Controllers\Admin\Bunpou;
 
-use App\Http\Requests\BunpouIntroRequest;
-use App\Models\Room;
-use App\Models\Bunpou;
+use App\Http\Requests\BunpouVocabRequest;
+use App\Models\BunpouVocab;
+use App\Models\BunpouChapters;
+use App\Models\BunpouModules;
 use App\Repositories\BunpouIntroRepository;
 use App\Http\Controllers\Controller;
-use App\DataTables\BunpouIntroDatatable;
+use App\DataTables\BunpouVocabDatatable;
 
-class BunpouController extends Controller
+class BunpouVocabController extends Controller
 {
 
-    protected $model, $repository, $room;
+    protected $vocab, $repository, $chapter, $module;
 
     public function __construct()
     {
-        $this->model = new Bunpou();
-        $this->room = new Room();
+        $this->module = new BunpouModules();
+        $this->vocab = new BunpouVocab();
+        $this->chapter = new BunpouChapters();
         $this->repository = new BunpouIntroRepository();
     }
 
-    protected $redirectAfterSave = 'bunpou.intro.index';
-    protected $moduleName = 'Bunpou Introduction';
+    protected $redirectAfterSave = 'bunpou.vocabulary.index';
+    protected $moduleName = 'Bunpou Vocabularies';
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(BunpouIntroDatatable $dataTable)
+    public function index(BunpouVocabDatatable $dataTable, $chapter=null)
     {
-        return $dataTable->render('backend.bunpou.intro.index');
+        if($chapter==null){
+            return redirect()->route("bunpou.chapter.redirect");
+        }
+
+        if(request()->module!=null){
+            $data = $this->chapter->data([
+                ["module", "=", request()->module],
+                ["is_active", "=", true],
+            ])->orderBy("order","asc")->firstOrFail();
+            return redirect()->route($this->redirectAfterSave,$data->id);
+        }
+
+        $data = $this->chapter->data($chapter)->firstOrFail();
+        $chapters = $this->chapter->data([
+            ["is_active", "=", true],
+            ["module", "=", $data->module],
+        ])->get();
+        $modules = $this->module->withChapterCount();
+
+        return $dataTable->render('backend.bunpou.vocab.index',compact("data","modules","chapters"));
     }
 
     /**
@@ -39,13 +60,14 @@ class BunpouController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($chapter=null)
     {
-        $data = $this->model->data()->get()->pluck('room')->all();
+        if($chapter==null){
+            return redirect()->route("bunpou.chapter.redirect");
+        }
+        $chapter = $this->chapter->data($chapter)->firstOrFail();
 
-        $rooms = $this->room->data("id","not",$data)->get();
-
-        return view('backend.bunpou.intro.form',compact("rooms"));
+        return view('backend.bunpou.vocab.form',compact("chapter"));
     }
 
     /**
@@ -54,13 +76,14 @@ class BunpouController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(BunpouIntroRequest $request)
+    public function store(BunpouVocabRequest $request)
     {
+        $module = $this->module->data($request->module)->firstOrFail();
         $param = $request->all();
         $saveData = $this->repository->create($param);
         flashDataAfterSave($saveData,$this->moduleName);
 
-        return redirect()->route($this->redirectAfterSave);
+        return redirect()->route($this->redirectAfterSave,$module->id);
     }
 
     /**
@@ -97,7 +120,7 @@ class BunpouController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(BunpouIntroRequest $request, $id)
+    public function update(BunpouVocabRequest $request, $id)
     {
         $param = $request->all();
         $saveData = $this->repository->update($id,$param);
@@ -115,5 +138,10 @@ class BunpouController extends Controller
     public function destroy($id)
     {
         return $this->repository->delete($id);
+    }
+
+    public function redirect(){
+        $module = $this->module->isActive()->firstOrFail();
+        return redirect()->route($this->redirectAfterSave,$module->id);
     }
 }
