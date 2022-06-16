@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class BunpouChapters extends Model
 {
@@ -42,5 +43,28 @@ class BunpouChapters extends Model
 
     public function isActive(){
         return BunpouChapters::where("is_active",true)->orderBy("order","asc");
+    }
+
+    public function withCount(){
+        return BunpouChapters::
+            select(DB::raw("
+                (
+                    SELECT id FROM bunpou_vocab_tests
+                    WHERE bunpou_vocab_tests.chapter = bunpou_chapters.id
+                    LIMIT 1 OFFSET 0
+                ) AS test_count,
+                (
+                    SELECT id FROM bunpou_particle
+                    WHERE bunpou_particle.chapter = bunpou_chapters.id
+                    LIMIT 1 OFFSET 0
+                ) AS particle_count,
+                (
+                    SELECT id FROM bunpou_particle_tests
+                    WHERE bunpou_particle_tests.chapter = bunpou_chapters.id
+                    LIMIT 1 OFFSET 0
+                ) AS particle_test_count,
+                *
+            "))
+            ->orderBy("order","asc");
     }
 }

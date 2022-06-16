@@ -73,59 +73,58 @@ Route::group(['middleware' => ['sentinelAuth','checkAccess'],'namespace' => 'Adm
     Route::group(['namespace'=>'Bunpou', 'prefix' =>'bunpou', 'as'=>'bunpou.'], function () {
         Route::resource('intro', 'BunpouController')->except('show');
 
-        Route::group(['prefix' =>'module/test', 'as'=>'module.test.'], function () {
-            Route::get('/', 'BunpouModuleTestController@redirect')->name("redirect");
-            Route::put('{id}/deactivate', 'BunpouModuleTestController@deactivate')->name('deactivate');
-            Route::put('{id}/activate', 'BunpouModuleTestController@activate')->name('activate');
-            Route::delete('{id}/destroy', 'BunpouModuleTestController@destroy')->name('destroy');
-            Route::get('{id}/edit', 'BunpouModuleTestController@edit')->name('edit');
-            Route::get('{module}/create', 'BunpouModuleTestController@create')->name('create');
-            Route::post('store', 'BunpouModuleTestController@store')->name('store');
-            Route::put('{id}/update', 'BunpouModuleTestController@update')->name('update');
-            Route::get('{module}', 'BunpouModuleTestController@index')->name('index');
-        });
-        Route::group(['prefix' =>'module/question', 'as'=>'module.question.'], function () {
-            Route::get('/', 'BunpouModuleQuestionController@redirect')->name("redirect");
-            Route::put('{id}/deactivate', 'BunpouModuleQuestionController@deactivate')->name('deactivate');
-            Route::put('{id}/activate', 'BunpouModuleQuestionController@activate')->name('activate');
-            Route::delete('{id}/destroy', 'BunpouModuleQuestionController@destroy')->name('destroy');
-            Route::get('{id}/edit', 'BunpouModuleQuestionController@edit')->name('edit');
-            Route::get('{test}/create', 'BunpouModuleQuestionController@create')->name('create');
-            Route::post('store', 'BunpouModuleQuestionController@store')->name('store');
-            Route::put('{id}/update', 'BunpouModuleQuestionController@update')->name('update');
-            Route::get('{test}', 'BunpouModuleQuestionController@index')->name('index');
+        Route::group(['prefix' =>'module', 'as'=>'module.'], function () {
+            Route::put('{id}/activate', 'BunpouModulesController@activate')->name('activate');
+            Route::put('{id}/deactivate', 'BunpouModulesController@deactivate')->name('deactivate');
+
+            Route::resource('test', 'BunpouModuleTestController')->except('show');
+            Route::group(['prefix' =>'test', 'as'=>'test.'], function () {
+                Route::put('{id}/deactivate', 'BunpouModuleTestController@deactivate')->name('deactivate');
+                Route::put('{id}/activate', 'BunpouModuleTestController@activate')->name('activate');
+                Route::get('{module}/module', 'BunpouModuleTestController@module')->name('module');
+            });
+
+            Route::resource('question', 'BunpouModuleQuestionController')->except('show');
         });
         Route::resource('module', 'BunpouModulesController');
-        Route::put('module/{id}/activate', 'BunpouModulesController@activate')->name('module.activate');
-        Route::put('module/{id}/deactivate', 'BunpouModulesController@deactivate')->name('module.deactivate');
 
         Route::resource('chapter', 'BunpouChaptersController')->except('show');
         Route::put('chapter/{id}/activate', 'BunpouChaptersController@activate')->name('chapter.activate');
         Route::put('chapter/{id}/deactivate', 'BunpouChaptersController@deactivate')->name('chapter.deactivate');
-
-        Route::group(['prefix' =>'chapter', 'as'=>'chapter.'], function () {
-            Route::get('/', 'BunpouChaptersController@redirect')->name("redirect");
-            Route::put('{id}/deactivate', 'BunpouChaptersController@deactivate')->name('deactivate');
-            Route::put('{id}/activate', 'BunpouChaptersController@activate')->name('activate');
-            Route::delete('{id}/destroy', 'BunpouChaptersController@destroy')->name('destroy');
-            Route::get('{id}/edit', 'BunpouChaptersController@edit')->name('edit');
-            Route::get('{module}/create', 'BunpouChaptersController@create')->name('create');
-            Route::post('store', 'BunpouChaptersController@store')->name('store');
-            Route::put('{id}/update', 'BunpouChaptersController@update')->name('update');
-            Route::get('{module}', 'BunpouChaptersController@index')->name('index');
-        });
+        Route::get('chapter/{module}/module', 'BunpouChaptersController@module')->name('chapter.module');
 
         Route::group(['prefix' =>'vocabulary', 'as'=>'vocabulary.'], function () {
-            Route::get('/', 'BunpouVocabController@redirect')->name("redirect");
-            Route::put('{id}/deactivate', 'BunpouVocabController@deactivate')->name('deactivate');
             Route::put('{id}/activate', 'BunpouVocabController@activate')->name('activate');
-            Route::delete('{id}/destroy', 'BunpouVocabController@destroy')->name('destroy');
-            Route::get('{id}/edit', 'BunpouVocabController@edit')->name('edit');
-            Route::get('{chapter}/create', 'BunpouVocabController@create')->name('create');
-            Route::post('store', 'BunpouVocabController@store')->name('store');
-            Route::put('{id}/update', 'BunpouVocabController@update')->name('update');
-            Route::get('{chapter}', 'BunpouVocabController@index')->name('index');
+            Route::put('{id}/deactivate', 'BunpouVocabController@deactivate')->name('deactivate');
+
+            Route::resource('test', 'BunpouVocabTestController')->except('show');
+            Route::group(['prefix' =>'test', 'as'=>'test.'], function () {
+                Route::put('{id}/deactivate', 'BunpouVocabTestController@deactivate')->name('deactivate');
+                Route::put('{id}/activate', 'BunpouVocabTestController@activate')->name('activate');
+                Route::get('{chapter}/chapter', 'BunpouVocabTestController@chapter')->name('chapter');
+            });
+
+            Route::resource('question', 'BunpouVocabQuestionController')->except('show');
         });
+        Route::resource('vocabulary', 'BunpouVocabController')->except('show');
+
+        Route::group(['prefix' =>'particle', 'as'=>'particle.'], function () {
+            Route::put('{id}/activate', 'BunpouParticleController@activate')->name('activate');
+            Route::put('{id}/deactivate', 'BunpouParticleController@deactivate')->name('deactivate');
+            Route::get('{chapter}/chapter', 'BunpouParticleController@chapter')->name('chapter');
+
+            Route::resource('detail', 'BunpouParticleDetailController')->except('show');
+
+            Route::resource('test', 'BunpouParticleTestController')->except('show');
+            Route::group(['prefix' =>'test', 'as'=>'test.'], function () {
+                Route::put('{id}/deactivate', 'BunpouParticleTestController@deactivate')->name('deactivate');
+                Route::put('{id}/activate', 'BunpouParticleTestController@activate')->name('activate');
+                Route::get('{chapter}/chapter', 'BunpouParticleTestController@chapter')->name('chapter');
+            });
+
+            Route::resource('question', 'BunpouParticleQuestionController')->except('show');
+        });
+        Route::resource('particle', 'BunpouParticleController')->except('show');
     });
 
     // Route::resource('verb-levels', 'B\MasterVerbLevelController')->except('show');
@@ -184,14 +183,14 @@ Route::group(['middleware' => ['sentinelAuth','checkAccess'],'namespace' => 'Adm
     // Route::resource('kanji-mini-courses', 'E\KanjiMiniCourseController')->except('show');
     // Route::resource('kanji-mini-course-questions', 'E\KanjiMiniCourseQuestionController')->except('show');
 
-    Route::resource('vocabulary-chapters', 'F\VocabularyChapterController')->except('show');
-    Route::resource('vocabulary-course-chapters', 'F\VocabularyCourseChapterController')->except('show');
-    Route::resource('vocabularies', 'F\VocabularyController')->except('show');
-    Route::resource('vocabulary-courses', 'F\VocabularyCourseController')->except('show');
-    Route::resource('vocabulary-course-questions', 'F\VocabularyCourseQuestionController')->except('show');
-    Route::resource('vocabulary-mini-course-chapters', 'F\VocabularyMiniCourseChapterController')->except('show');
-    Route::resource('vocabulary-mini-courses', 'F\VocabularyMiniCourseController')->except('show');
-    Route::resource('vocabulary-mini-course-questions', 'F\VocabularyMiniCourseQuestionController')->except('show');
+    // Route::resource('vocabulary-chapters', 'F\VocabularyChapterController')->except('show');
+    // Route::resource('vocabulary-course-chapters', 'F\VocabularyCourseChapterController')->except('show');
+    // Route::resource('vocabularies', 'F\VocabularyController')->except('show');
+    // Route::resource('vocabulary-courses', 'F\VocabularyCourseController')->except('show');
+    // Route::resource('vocabulary-course-questions', 'F\VocabularyCourseQuestionController')->except('show');
+    // Route::resource('vocabulary-mini-course-chapters', 'F\VocabularyMiniCourseChapterController')->except('show');
+    // Route::resource('vocabulary-mini-courses', 'F\VocabularyMiniCourseController')->except('show');
+    // Route::resource('vocabulary-mini-course-questions', 'F\VocabularyMiniCourseQuestionController')->except('show');
 
     // Route::resource('master-ability-courses', 'G\MasterAbilityCourseController')->except('show');
     // Route::resource('master-ability-course-levels', 'G\MasterAbilityCourseLevelController')->except('show');

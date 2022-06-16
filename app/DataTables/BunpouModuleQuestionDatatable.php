@@ -33,9 +33,6 @@ class BunpouModuleQuestionDatatable extends DataTable
                     compact('edit_url','delete_url','__route_name','__route_name_delete')
                 );
             })
-            ->editColumn('rownum', function ($question) use ($start) {
-                return $question->rownum+$start;
-            })
             ->editColumn('image', function ($question) {
                 if(empty($question->image)){
                     $color = "secondary";
@@ -100,17 +97,26 @@ class BunpouModuleQuestionDatatable extends DataTable
      */
     public function html()
     {
+        $id = 'bunpou-module-question-dt';
+        $domScript = "data.module = $('#$id-module').val(); data.test = $('#$id-test').val();";
+        $stateSaveScript = "function(settings, data){
+            data.search.search = data.search.search
+            data.module = data.module ? data.module : $('#$id-module').val()
+            data.test = data.test ? data.test : $('#$id-test').val()
+        }";
+
         return $this->builder()
-                    ->setTableId('room-table')
+                    ->setTableId($id)
                     ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('<"row"<"col-sm-6"l><"col-sm-6"f>> <"row"<"col-sm-12"tr>> <"row"<"col-sm-5"i><"col-sm-7"p>>')
+                    ->minifiedAjax("",$domScript)
+                    ->dom('<"row"<"col-sm-3 section-module"><"col-sm-3 section-test"><"col-sm-3"><"col-sm-3"f>> <"row"<"col-sm-12"tr>> <"row"<"col-sm-4"l><"col-sm-3"i><"col-sm-5"p>>')
                     ->orderBy(0,'asc')
                     ->responsive(true)
                     ->processing(true)
                     ->serverSide(true)
                     ->autoWidth(false)
-                    // ->stateSave(true)
+                    ->stateSave(true)
+                    ->stateSaveParams($stateSaveScript)
                     ->buttons(
                         Button::make('create'),
                         Button::make('export'),
@@ -129,19 +135,14 @@ class BunpouModuleQuestionDatatable extends DataTable
     {
         $hasAction = isHasAnyActionColumn();
         return [
-            Column::make('rownum')
-                ->title('#')
-                ->searchable(false)
-                ->addClass('text-center')
-                ->width("5%"),
+            Column::make('order')
+                ->name('order')
+                ->title('Number')
+                ->width("10%")
+                ->addClass('text-center'),
             Column::make('question')
                 ->name('question')
                 ->title('Question'),
-            Column::make('order')
-                ->name('order')
-                ->title('Order')
-                ->width("10%")
-                ->addClass('text-center'),
             Column::make('image')
                 ->name('image')
                 ->title('Image')
@@ -163,18 +164,8 @@ class BunpouModuleQuestionDatatable extends DataTable
                 ->visible($hasAction)
                 ->exportable(false)
                 ->printable(true)
-                ->width("15%")
+                ->width("20%")
                 ->addClass('text-center')
         ];
-    }
-
-    /**
-     * Get filename for export.
-     *
-     * @return string
-     */
-    protected function filename()
-    {
-        return 'User_' . date('YmdHis');
     }
 }

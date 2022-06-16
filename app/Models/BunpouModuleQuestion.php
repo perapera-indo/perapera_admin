@@ -18,6 +18,7 @@ class BunpouModuleQuestion extends Model
             'audio',
             'test',
             'order',
+            'time',
             'is_active',
         ]);
 

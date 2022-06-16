@@ -102,88 +102,83 @@ return [
                 'routeName' => 'bunpou.module.index',
                 'icon' => 'mdi mdi-flag menu-icon',
             ],
-            'module_test' => [
-                'title' => 'Module Versi Test',
-                'routeName' => 'bunpou.module.test.redirect',
-                'icon' => 'mdi mdi-flag menu-icon',
-            ],
-            'module_question' => [
-                'title' => 'Module Question',
-                'routeName' => 'bunpou.module.question.redirect',
-                'icon' => 'mdi mdi-flag menu-icon',
-            ],
             'chapters' => [
                 'title' => 'Chapters',
-                'routeName' => 'bunpou.chapter.redirect',
+                'routeName' => 'bunpou.chapter.index',
                 'icon' => 'mdi mdi-flag menu-icon',
             ],
             'vocab' => [
                 'title' => 'Vocabularies',
-                'routeName' => 'bunpou.vocabulary.redirect',
+                'routeName' => 'bunpou.vocabulary.index',
+                'icon' => 'mdi mdi-flag menu-icon',
+            ],
+            'particle' => [
+                'title' => 'Particle',
+                'routeName' => 'bunpou.particle.index',
                 'icon' => 'mdi mdi-flag menu-icon',
             ],
         ]
     ],
-    'room-2' => [
-        'title' => 'Room 2',
-        'routeName' => 'vocabularies.index',
-        'additional_query' => '',
-        'icon' => 'mdi mdi-comment-text-outline menu-icon',
-        'sub_menu' => [
-            // 'vocabulary-group' => [
-            //     'title' => 'Group Kosa Kata',
-            //     'routeName' => 'vocabulary-groups.index',
-            //     'additional_query' => '',
-            //     'icon' => 'mdi mdi-flag menu-icon',
-            // ],
-            'vocabulary-chapter' => [
-                'title' => 'Bab Kosakata',
-                'routeName' => 'vocabulary-chapters.index',
-                'icon' => 'mdi mdi-flag menu-icon',
-            ],
-            'vocabularies' => [
-                'title' => 'Kosakata',
-                'routeName' => 'vocabularies.index',
-                'icon' => 'mdi mdi-flag menu-icon',
-            ],
-            'vocabulary-course-chapter' => [
-                'title' => 'Bab Test Kosakata',
-                'routeName' => 'vocabulary-course-chapters.index',
-                'additional_query' => '',
-                'icon' => 'mdi mdi-flag menu-icon',
-            ],
-            'vocabulary-course' => [
-                'title' => 'Level Test Kosakata',
-                'routeName' => 'vocabulary-courses.index',
-                'additional_query' => '',
-                'icon' => 'mdi mdi-flag menu-icon',
-            ],
-            'vocabulary-question' => [
-                'title' => 'Daftar Pertanyaan',
-                'routeName' => 'vocabulary-course-questions.index',
-                'additional_query' => '',
-                'icon' => 'mdi mdi-flag menu-icon',
-            ],
-            // 'vocabulary-mini-course-chapter' => [
-            //     'title' => 'Mini Bab Test Kosakata',
-            //     'routeName' => 'vocabulary-mini-course-chapters.index',
-            //     'additional_query' => '',
-            //     'icon' => 'mdi mdi-flag menu-icon',
-            // ],
-            'vocabulary-course-mini' => [
-                'title' => ' Mini Level Test Kosakata',
-                'routeName' => 'vocabulary-mini-courses.index',
-                'additional_query' => '',
-                'icon' => 'mdi mdi-flag menu-icon',
-            ],
-            'vocabulary-question-mini' => [
-                'title' => 'Daftar Mini Pertanyaan',
-                'routeName' => 'vocabulary-mini-course-questions.index',
-                'additional_query' => '',
-                'icon' => 'mdi mdi-flag menu-icon',
-            ]
-        ]
-    ],
+    // 'room-2' => [
+    //     'title' => 'Room 2',
+    //     'routeName' => 'vocabularies.index',
+    //     'additional_query' => '',
+    //     'icon' => 'mdi mdi-comment-text-outline menu-icon',
+    //     'sub_menu' => [
+    //         // 'vocabulary-group' => [
+    //         //     'title' => 'Group Kosa Kata',
+    //         //     'routeName' => 'vocabulary-groups.index',
+    //         //     'additional_query' => '',
+    //         //     'icon' => 'mdi mdi-flag menu-icon',
+    //         // ],
+    //         'vocabulary-chapter' => [
+    //             'title' => 'Bab Kosakata',
+    //             'routeName' => 'vocabulary-chapters.index',
+    //             'icon' => 'mdi mdi-flag menu-icon',
+    //         ],
+    //         'vocabularies' => [
+    //             'title' => 'Kosakata',
+    //             'routeName' => 'vocabularies.index',
+    //             'icon' => 'mdi mdi-flag menu-icon',
+    //         ],
+    //         'vocabulary-course-chapter' => [
+    //             'title' => 'Bab Test Kosakata',
+    //             'routeName' => 'vocabulary-course-chapters.index',
+    //             'additional_query' => '',
+    //             'icon' => 'mdi mdi-flag menu-icon',
+    //         ],
+    //         'vocabulary-course' => [
+    //             'title' => 'Level Test Kosakata',
+    //             'routeName' => 'vocabulary-courses.index',
+    //             'additional_query' => '',
+    //             'icon' => 'mdi mdi-flag menu-icon',
+    //         ],
+    //         'vocabulary-question' => [
+    //             'title' => 'Daftar Pertanyaan',
+    //             'routeName' => 'vocabulary-course-questions.index',
+    //             'additional_query' => '',
+    //             'icon' => 'mdi mdi-flag menu-icon',
+    //         ],
+    //         // 'vocabulary-mini-course-chapter' => [
+    //         //     'title' => 'Mini Bab Test Kosakata',
+    //         //     'routeName' => 'vocabulary-mini-course-chapters.index',
+    //         //     'additional_query' => '',
+    //         //     'icon' => 'mdi mdi-flag menu-icon',
+    //         // ],
+    //         'vocabulary-course-mini' => [
+    //             'title' => ' Mini Level Test Kosakata',
+    //             'routeName' => 'vocabulary-mini-courses.index',
+    //             'additional_query' => '',
+    //             'icon' => 'mdi mdi-flag menu-icon',
+    //         ],
+    //         'vocabulary-question-mini' => [
+    //             'title' => 'Daftar Mini Pertanyaan',
+    //             'routeName' => 'vocabulary-mini-course-questions.index',
+    //             'additional_query' => '',
+    //             'icon' => 'mdi mdi-flag menu-icon',
+    //         ]
+    //     ]
+    // ],
     // 'room-3' => [
     //     'title' => 'Room 3',
     //     'routeName' => 'particle-educations.index',

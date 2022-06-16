@@ -28,6 +28,10 @@ class BunpouChaptersRepository
             $chapter->name = $data['name'];
         }
 
+        if(array_key_exists("module",$data)){
+            $chapter->module = $data['module'];
+        }
+
         if(array_key_exists("is_active",$data)){
             $chapter->is_active = $data['is_active'];
         }

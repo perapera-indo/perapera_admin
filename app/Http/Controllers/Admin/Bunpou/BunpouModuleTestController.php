@@ -31,15 +31,10 @@ class BunpouModuleTestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(BunpouModuleTestDatatable $dataTable, $module=null)
+    public function index(BunpouModuleTestDatatable $dataTable)
     {
-        if($module==null){
-            return redirect()->route("bunpou.module.index");
-        }
-
-        $data = $this->module->data($module)->firstOrFail();
         $modules = $this->module->isActive()->get();
-
+        $data = $modules[0];
         return $dataTable->render('backend.bunpou.module.test.index',compact("data","modules"));
     }
 
@@ -48,13 +43,10 @@ class BunpouModuleTestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($module=null)
+    public function create()
     {
-        if($module==null){
-            return redirect()->route("bunpou.module.index");
-        }
-        $module = $this->module->data($module)->firstOrFail();
-        return view('backend.bunpou.module.test.form',compact("module"));
+        $modules = $this->module->isActive()->get();
+        return view('backend.bunpou.module.test.form',compact("modules"));
     }
 
     /**
@@ -65,12 +57,12 @@ class BunpouModuleTestController extends Controller
      */
     public function store(BunpouModuleTestRequest $request)
     {
-        $module = $this->module->data($request->module)->firstOrFail();
+        $this->module->data($request->module)->firstOrFail();
         $param = $request->all();
         $saveData = $this->repository->create($param);
         flashDataAfterSave($saveData,$this->moduleName);
 
-        return redirect()->route($this->redirectAfterSave,$module->id);
+        return redirect()->route($this->redirectAfterSave);
 
     }
 
@@ -96,11 +88,9 @@ class BunpouModuleTestController extends Controller
      */
     public function edit($id)
     {
-
         $data = $this->model->data($id)->firstOrFail();
-        $module = $this->module->data($data->module)->firstOrFail();
-
-        return view('backend.bunpou.module.test.form', compact('data','module'));
+        $modules = $this->module->isActive()->get();
+        return view('backend.bunpou.module.test.form', compact('data','modules'));
     }
 
     /**
@@ -112,12 +102,12 @@ class BunpouModuleTestController extends Controller
      */
     public function update(BunpouModuleTestRequest $request, $id)
     {
-        $module = $this->module->data($request->module)->firstOrFail();
+        $this->module->data($request->module)->firstOrFail();
         $param = $request->all();
         $saveData = $this->repository->update($param, $id);
         flashDataAfterSave($saveData,$this->moduleName);
 
-        return redirect()->route($this->redirectAfterSave,$module->id);
+        return redirect()->route($this->redirectAfterSave);
     }
 
     /**
@@ -146,8 +136,8 @@ class BunpouModuleTestController extends Controller
         return $this->repository->deactivate($id);
     }
 
-    public function redirect(){
-        $module = $this->module->isActive()->firstOrFail();
-        return redirect()->route($this->redirectAfterSave,$module->id);
+    public function module($module){
+        $test = $this->model->where("module",$module)->orderBy("order","asc")->get();
+        return $test;
     }
 }

@@ -77,17 +77,25 @@ class BunpouChaptersDatatable extends DataTable
      */
     public function html()
     {
+        $id = 'bunpou-chapter-dt';
+        $domScript = "data.module = $('#$id-module').val();";
+        $stateSaveScript = "function(settings, data){
+            data.search.search = data.search.search
+            data.module = data.module ? data.module : $('#$id-module').val()
+        }";
+
         return $this->builder()
-                    ->setTableId('room-table')
+                    ->setTableId($id)
                     ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('<"row"<"col-sm-6"l><"col-sm-6"f>> <"row"<"col-sm-12"tr>> <"row"<"col-sm-5"i><"col-sm-7"p>>')
+                    ->minifiedAjax("",$domScript)
+                    ->dom('<"row"<"col-sm-3 section-module"><"col-sm-6"><"col-sm-3"f>> <"row"<"col-sm-12"tr>> <"row"<"col-sm-4"l><"col-sm-3"i><"col-sm-5"p>>')
                     ->orderBy(0,'asc')
                     ->responsive(true)
                     ->processing(true)
                     ->serverSide(true)
                     ->autoWidth(false)
-                    // ->stateSave(true)
+                    ->stateSave(true)
+                    ->stateSaveParams($stateSaveScript)
                     ->buttons(
                         Button::make('create'),
                         Button::make('export'),
@@ -129,18 +137,8 @@ class BunpouChaptersDatatable extends DataTable
                 ->visible($hasAction)
                 ->exportable(false)
                 ->printable(true)
-                ->width("15%")
+                ->width("20%")
                 ->addClass('text-center')
         ];
-    }
-
-    /**
-     * Get filename for export.
-     *
-     * @return string
-     */
-    protected function filename()
-    {
-        return 'User_' . date('YmdHis');
     }
 }

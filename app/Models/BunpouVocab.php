@@ -19,6 +19,8 @@ class BunpouVocab extends Model
             'is_active',
             'chapter',
             'order',
+            'image',
+            'audio',
         ]);
 
         if(is_string($param1) && $param2=="equal" && is_array($param3)){

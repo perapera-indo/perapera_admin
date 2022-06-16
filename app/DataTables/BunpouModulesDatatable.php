@@ -76,7 +76,7 @@ class BunpouModulesDatatable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('room-table')
+                    ->setTableId('bunpou-module-dt')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->dom('<"row"<"col-sm-6"l><"col-sm-6"f>> <"row"<"col-sm-12"tr>> <"row"<"col-sm-5"i><"col-sm-7"p>>')

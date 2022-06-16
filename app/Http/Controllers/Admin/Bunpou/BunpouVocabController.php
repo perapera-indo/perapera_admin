@@ -6,7 +6,7 @@ use App\Http\Requests\BunpouVocabRequest;
 use App\Models\BunpouVocab;
 use App\Models\BunpouChapters;
 use App\Models\BunpouModules;
-use App\Repositories\BunpouIntroRepository;
+use App\Repositories\BunpouVocabRepository;
 use App\Http\Controllers\Controller;
 use App\DataTables\BunpouVocabDatatable;
 
@@ -20,7 +20,7 @@ class BunpouVocabController extends Controller
         $this->module = new BunpouModules();
         $this->vocab = new BunpouVocab();
         $this->chapter = new BunpouChapters();
-        $this->repository = new BunpouIntroRepository();
+        $this->repository = new BunpouVocabRepository();
     }
 
     protected $redirectAfterSave = 'bunpou.vocabulary.index';
@@ -31,28 +31,14 @@ class BunpouVocabController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(BunpouVocabDatatable $dataTable, $chapter=null)
+    public function index(BunpouVocabDatatable $dataTable)
     {
-        if($chapter==null){
-            return redirect()->route("bunpou.chapter.redirect");
-        }
-
-        if(request()->module!=null){
-            $data = $this->chapter->data([
-                ["module", "=", request()->module],
-                ["is_active", "=", true],
-            ])->orderBy("order","asc")->firstOrFail();
-            return redirect()->route($this->redirectAfterSave,$data->id);
-        }
-
-        $data = $this->chapter->data($chapter)->firstOrFail();
-        $chapters = $this->chapter->data([
-            ["is_active", "=", true],
-            ["module", "=", $data->module],
-        ])->get();
         $modules = $this->module->withChapterCount();
+        $data = request()->module!=null
+            ? $this->module->data(request()->module)->firstOrFail()
+            : $modules[0];
 
-        return $dataTable->render('backend.bunpou.vocab.index',compact("data","modules","chapters"));
+        return $dataTable->render('backend.bunpou.vocab.index',compact("data","modules"));
     }
 
     /**
@@ -60,14 +46,10 @@ class BunpouVocabController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($chapter=null)
+    public function create()
     {
-        if($chapter==null){
-            return redirect()->route("bunpou.chapter.redirect");
-        }
-        $chapter = $this->chapter->data($chapter)->firstOrFail();
-
-        return view('backend.bunpou.vocab.form',compact("chapter"));
+        $modules = $this->module->withChapterCount();
+        return view('backend.bunpou.vocab.form',compact("modules"));
     }
 
     /**
@@ -78,12 +60,12 @@ class BunpouVocabController extends Controller
      */
     public function store(BunpouVocabRequest $request)
     {
-        $module = $this->module->data($request->module)->firstOrFail();
+        $this->chapter->data($request->chapter)->firstOrFail();
         $param = $request->all();
         $saveData = $this->repository->create($param);
         flashDataAfterSave($saveData,$this->moduleName);
 
-        return redirect()->route($this->redirectAfterSave,$module->id);
+        return redirect()->route($this->redirectAfterSave);
     }
 
     /**
@@ -105,12 +87,11 @@ class BunpouVocabController extends Controller
      */
     public function edit($id)
     {
-        $data = $this->model->data()->where("id","<>",$id)->get()->pluck('room')->all();
-        $rooms = $this->room->data("id","not",$data)->get();
+        $data = $this->vocab->data($id)->firstOrFail();
+        $chapter = $this->chapter->data($data->chapter)->firstOrFail();
+        $modules = $this->module->withChapterCount();
 
-        $data = $this->model->data($id)->firstOrFail();
-
-        return view('backend.bunpou.intro.form',compact("rooms","data"));
+        return view('backend.bunpou.vocab.form',compact("data","chapter","modules"));
     }
 
     /**
@@ -122,6 +103,7 @@ class BunpouVocabController extends Controller
      */
     public function update(BunpouVocabRequest $request, $id)
     {
+        $this->chapter->data($request->chapter)->firstOrFail();
         $param = $request->all();
         $saveData = $this->repository->update($id,$param);
         flashDataAfterSave($saveData,$this->moduleName);
@@ -140,8 +122,13 @@ class BunpouVocabController extends Controller
         return $this->repository->delete($id);
     }
 
-    public function redirect(){
-        $module = $this->module->isActive()->firstOrFail();
-        return redirect()->route($this->redirectAfterSave,$module->id);
+    public function activate($id)
+    {
+        return $this->repository->activate($id);
+    }
+
+    public function deactivate($id)
+    {
+        return $this->repository->deactivate($id);
     }
 }

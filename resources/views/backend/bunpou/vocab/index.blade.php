@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', "List vocabulary in ". $data->name ." chapter")
+@section('title', "Bunpou Vocabulary List")
 @section('content')
     <style>
         .select2-container--bootstrap4 .select2-selection--single {
@@ -8,23 +8,32 @@
         .select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
             line-height: 2.25rem !important;
         }
-        .float-right {
-            width: 20%;
+        .select2-container .select2-selection {
+            border-radius: 0.2rem !important;
         }
-        .float-right .row > div {
-            padding: 0;
+        .select2-container {
+            display: inline-block;
+            min-width: 100px;
         }
-        .float-right .row > div:last-child {
-            padding-right: 40px;
-        }
-        .float-right .row > div:first-child label {
-            margin: 0;
-        }
-        .card-title {
-            text-transform: none !important;
+        .select2-container input {
+            width: 90% !important;
         }
         .select2-results__option[aria-disabled="true"] {
-            background-color: #c0c4c8;
+            background-color: #e9ecef;
+        }
+        .select2-container--bootstrap4 .select2-dropdown .select2-results__option[aria-selected=true] {
+            background-color: #b66dff;
+            color: white;
+        }
+        .select2-container li {
+            max-width: 100%;
+            overflow: hidden;
+            word-wrap: normal !important;
+            white-space: normal;
+        }
+
+        .pagination {
+            overflow-x: auto;
         }
     </style>
     <div class="content-wrapper">
@@ -34,84 +43,133 @@
                     <div class="card-body">
                         <div class="form-group">
                             @isPermitted('bunpou.vocabulary.create')
-                                <a href="{{ route('bunpou.vocabulary.create',$data->id) }}" type="button" class="btn btn-outline-info btn-rounded btn-fw btn-sm">
+                                <a href="{{ route('bunpou.vocabulary.create') }}" type="button" class="btn btn-outline-info btn-rounded btn-fw btn-sm">
                                     <i class="mdi mdi-plus-circle btn-icon-prepend"></i> Tambah
                                 </a>
                             @endisPermitted
-                            <div class="float-right">
-                                <div class="row">
-                                    <div class="col-md-3 d-flex align-items-center justify-content-center">
-                                        <label>Chapter : </label>
-                                    </div>
-                                    <div class="col">
-                                        <select class="form-control select2" id="chapter">
-                                            @foreach (@$chapters as $chapter)
-                                                <option value="{{ $chapter->id }}"
-                                                    {{ $chapter->id == @$data->id ? 'selected' : '' }}>
-                                                    {{ $chapter->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="float-right">
-                                <div class="row">
-                                    <div class="col-md-3 d-flex align-items-center justify-content-center">
-                                        <label>Module : </label>
-                                    </div>
-                                    <div class="col">
-                                        <select class="form-control select2" id="module">
-                                            @foreach (@$modules as $module)
-                                                <option value="{{ $module->id }}"
-                                                    {{ $module->id == @$data->module ? 'selected' : '' }}
-                                                    {{ $module->test_count==null ? "disabled" : "" }}
-                                                    >
-                                                    {{ $module->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
+                            <div class="pull-right">
+                                <a href="{{ route('bunpou.vocabulary.test.index') }}" type="button" class="btn btn-outline-info btn-rounded btn-fw btn-sm">
+                                    Manage Test
+                                </a>
+                                <a href="{{ route('bunpou.vocabulary.question.index') }}" type="button" class="btn btn-outline-info btn-rounded btn-fw btn-sm">
+                                    Manage Question
+                                </a>
                             </div>
                         </div>
-                        <h4 class="card-title text-center table-title">List vocabulary in {{$data->name}} chapter</h4>
+                        <h4 class="card-title text-center table-title">List Bunpou Vocabulary</h4>
                         <br>
                         <div class="col-md-12">
-                            {!! $dataTable->table(['class'=>'table table-hover table-responsive-lg','id' => 'app'], true) !!}
+                            {!! $dataTable->table(['class'=>'table table-hover table-responsive-lg'], true) !!}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="dataTables_filter pull-left hidden">
+        <label class="d-flex align-items-center justify-content-center">
+            <span>Module :</span>
+            &nbsp;
+            <select class="form-control" id="{!! $dataTable->getTableId() !!}-module">
+                @foreach (@$modules as $module)
+                    <option value="{{ $module->id }}"
+                        {{ $module->id == @$data->id ? 'selected' : '' }}
+                        {{ $module->chapter_count==null ? "disabled" : "" }}>
+                        {{ $module->name }}</option>
+                @endforeach
+            </select>
+        </label>
+    </div>
+
+    <div class="dataTables_filter pull-left hidden">
+        <label class="d-flex align-items-center justify-content-center">
+            <span>Chapter :</span>
+            &nbsp;
+            <select class="form-control" id="{!! $dataTable->getTableId() !!}-chapter"></select>
+        </label>
+    </div>
 @endsection
 @section('scripts')
     {!! $dataTable->scripts() !!}
 
     <script>
-        const url = "{{ url('admin/bunpou/vocabulary') }}/"
-        const chapter = $("#chapter")
-        chapter.on("change", (e)=>{
-            var id = chapter.val()
-            window.location.href = url + id
-        })
+        $(document).ready(()=>{
+            const dtId = "{!! $dataTable->getTableId() !!}"
+            const prevState = JSON.parse(localStorage.getItem(`DataTables_${dtId}_${location.pathname}`))
 
-        const module = $("#module")
-        const pk = {{ $data->id }}
-        module.on("change", (e)=>{
-            var id = module.val()
-            window.location.href = url + pk + "?module=" + id
-        })
+            setCustomFilterDatatable({
+                section : $(".section-chapter"),
+                filter : $(`#${dtId}-chapter`).closest("div"),
+                complete : (filter,section)=>{
+                    let dt = $(`#${dtId}`).DataTable()
+                    let select = filter.find("select")
 
-        module.on('select2:open', function (e) {
-            setTimeout(() => {
-                $(".select2-results__option[aria-disabled='true']")
-                    .attr("title","This module has no test")
-            }, 500);
-        })
+                    select.select2({
+                        placeholder: 'Please Select',
+                        theme: 'bootstrap4',
+                        width: 'resolve',
+                        allowClear: true,
+                        dropdownParent: select.parent()
+                    }).on("change", (e)=>{
+                        dt.search($(`#${dtId}_filter input`).val()).draw()
+                    })
 
-        $(document).on("click", ".select2-results__option[aria-disabled='true']", ()=>{
-            alert("This module has no test")
+                    resizeSelect2FilterDatatable(select,section)
+
+                    if(prevState!=null && prevState.chapter!=null){
+                        select.val(prevState.chapter).trigger('change')
+                    }
+                }
+            })
+
+            setCustomFilterDatatable({
+                section : $(".section-module"),
+                filter : $(`#${dtId}-module`).closest("div"),
+                complete : (filter,section)=>{
+                    let dt = $(`#${dtId}`).DataTable()
+                    let select = filter.find("select")
+
+                    select.select2({
+                        placeholder: 'Please Select',
+                        theme: 'bootstrap4',
+                        width: 'resolve',
+                        allowClear: true,
+                        dropdownParent: select.parent()
+                    }).on('select2:open', function (e) {
+                        setTimeout(() => {
+                            $(".select2-results__option[aria-disabled='true']")
+                                .attr("title","This module has no chapter")
+                        }, 500);
+                    }).on("change", (e)=>{
+                        let chapter = $(`#${dtId}-chapter`)
+                        $.ajax({
+                            url: `{{ url('admin/bunpou/chapter') }}/${select.val()}/module`,
+                            beforeSend: ()=>{
+                                chapter.html("")
+                            },
+                            success: (res)=>{
+                                res.forEach((v,i)=>{
+                                    chapter.append(`<option value="${v.id}">${v.name}</option>`)
+                                })
+
+                                triggerFilterOrDrawDatatable(dtId,chapter,prevState,"chapter")
+                            },
+                            error: (res)=>{
+                                toastr.error("Error Occured")
+                            },
+                        })
+                    })
+                    .val(prevState!=null && prevState.module!=null ? prevState.module : $(select.find("option:not(:disabled)")[0]).attr("value"))
+                    .trigger('change')
+
+                    resizeSelect2FilterDatatable(select,section)
+                }
+            })
+
+            $(document).on("click", ".select2-results__option[aria-disabled='true']", ()=>{
+                toastr.error("This module has no chapter")
+            })
         })
     </script>
 @endsection

@@ -46,28 +46,28 @@ class BunpouModules extends Model
 
     public function withTestCount(){
         return BunpouModules::
-            select(DB::raw("(
-                SELECT id FROM bunpou_module_tests
-                WHERE bunpou_module_tests.module = bunpou_modules.id
-                    AND bunpou_module_tests.is_active = true
-                LIMIT 1 OFFSET 0
+            select(DB::raw("
+                (
+                    SELECT id FROM bunpou_module_tests
+                    WHERE bunpou_module_tests.module = bunpou_modules.id
+                    LIMIT 1 OFFSET 0
                 ) AS test_count,
-                *"))
-            ->where("is_active",true)
+                *
+            "))
             ->orderBy("order","asc")
             ->get();
     }
 
     public function withChapterCount(){
         return BunpouModules::
-            select(DB::raw("(
-                SELECT id FROM bunpou_chapters
-                WHERE bunpou_chapters.module = bunpou_modules.id
-                    AND bunpou_chapters.is_active = true
-                LIMIT 1 OFFSET 0
-                ) AS test_count,
-                *"))
-            ->where("is_active",true)
+            select(DB::raw("
+                (
+                    SELECT id FROM bunpou_chapters
+                    WHERE bunpou_chapters.module = bunpou_modules.id
+                    LIMIT 1 OFFSET 0
+                ) AS chapter_count,
+                *
+            "))
             ->orderBy("order","asc")
             ->get();
     }

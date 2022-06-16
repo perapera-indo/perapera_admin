@@ -12,9 +12,9 @@ class BunpouModuleTestRepository
 
         $test->title = $data['title'];
         $test->module = $data['module'];
-        $test->order = $data['order'];
+        $test->order = 0;
         $test->time = $data['time'];
-        $test->is_active = true;
+        $test->is_active = false;
 
         $test->save();
 
@@ -27,6 +27,10 @@ class BunpouModuleTestRepository
 
         if(array_key_exists("title",$data)){
             $test->title = $data['title'];
+        }
+
+        if(array_key_exists("module",$data)){
+            $test->module = $data['module'];
         }
 
         if(array_key_exists("is_active",$data)){
@@ -62,6 +66,8 @@ class BunpouModuleTestRepository
         $test->is_active = true;
         $test->update();
 
+        $this->deactiveAllExcept($test,$test->module,$id);
+
         return $test;
     }
 
@@ -72,5 +78,13 @@ class BunpouModuleTestRepository
         $test->update();
 
         return $test;
+    }
+
+    private function deactiveAllExcept($test,$module,$id){
+        if($test){
+            BunpouModuleTest::where("id","<>",$id)->where("module",$module)->update([
+                "is_active" => false
+            ]);
+        }
     }
 }

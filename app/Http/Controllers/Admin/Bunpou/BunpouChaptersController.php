@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin\Bunpou;
 use App\Http\Requests\BunpouChaptersRequest;
 use App\Models\BunpouChapters;
 use App\Models\BunpouModules;
+use App\Models\BunpouVocab;
+use App\Models\BunpouParticle;
 use App\Repositories\BunpouChaptersRepository;
 use App\Http\Controllers\Controller;
 use App\DataTables\BunpouChaptersDatatable;
@@ -12,12 +14,14 @@ use App\DataTables\BunpouChaptersDatatable;
 class BunpouChaptersController extends Controller
 {
 
-    protected $model, $repository, $module;
+    protected $model, $repository, $module, $vocab, $particle;
 
     public function __construct()
     {
         $this->model = new BunpouChapters();
+        $this->vocab = new BunpouVocab();
         $this->module = new BunpouModules();
+        $this->particle = new BunpouParticle();
         $this->repository = new BunpouChaptersRepository();
     }
 
@@ -29,14 +33,10 @@ class BunpouChaptersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(BunpouChaptersDatatable $dataTable, $module=null)
+    public function index(BunpouChaptersDatatable $dataTable)
     {
-        if($module==null){
-            return redirect()->route("bunpou.module.index");
-        }
-
-        $data = $this->module->data($module)->firstOrFail();
         $modules = $this->module->isActive()->get();
+        $data = $modules[0];
         return $dataTable->render('backend.bunpou.chapter.index',compact("data","modules"));
     }
 
@@ -45,13 +45,10 @@ class BunpouChaptersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($module=null)
+    public function create()
     {
-        if($module==null){
-            return redirect()->route("bunpou.module.index");
-        }
-        $module = $this->module->data($module)->firstOrFail();
-        return view('backend.bunpou.chapter.form',compact("module"));
+        $modules = $this->module->isActive()->get();
+        return view('backend.bunpou.chapter.form',compact("modules"));
     }
 
     /**
@@ -62,12 +59,12 @@ class BunpouChaptersController extends Controller
      */
     public function store(BunpouChaptersRequest $request)
     {
-        $module = $this->module->data($request->module)->firstOrFail();
+        $this->module->data($request->module)->firstOrFail();
         $param = $request->all();
         $saveData = $this->repository->create($param);
         flashDataAfterSave($saveData,$this->moduleName);
 
-        return redirect()->route($this->redirectAfterSave,$module->id);
+        return redirect()->route($this->redirectAfterSave);
 
     }
 
@@ -89,11 +86,9 @@ class BunpouChaptersController extends Controller
      */
     public function edit($id)
     {
-
         $data = $this->model->data($id)->firstOrFail();
-        $module = $this->module->data($data->module)->firstOrFail();
-
-        return view('backend.bunpou.chapter.form', compact('data','module'));
+        $modules = $this->module->isActive()->get();
+        return view('backend.bunpou.chapter.form', compact('data','modules'));
     }
 
     /**
@@ -110,7 +105,7 @@ class BunpouChaptersController extends Controller
         $saveData = $this->repository->update($param, $id);
         flashDataAfterSave($saveData,$this->moduleName);
 
-        return redirect()->route($this->redirectAfterSave,$module->id);
+        return redirect()->route($this->redirectAfterSave);
     }
 
     /**
@@ -121,6 +116,15 @@ class BunpouChaptersController extends Controller
      */
     public function destroy($id)
     {
+        $chapter = $this->model->data($id)->firstOrFail();
+        $vocab = $this->vocab->data("chapter",$chapter->id)->first();
+        if($vocab!=null){
+            return "false";
+        }
+        $particle = $this->particle->data("chapter",$chapter->id)->first();
+        if($particle!=null){
+            return "false";
+        }
         return $this->repository->delete($id);
     }
 
@@ -134,8 +138,8 @@ class BunpouChaptersController extends Controller
         return $this->repository->deactivate($id);
     }
 
-    public function redirect(){
-        $module = $this->module->isActive()->firstOrFail();
-        return redirect()->route($this->redirectAfterSave,$module->id);
+    public function module($module){
+        $chapter = $this->model->withCount()->where("module",$module)->get();
+        return $chapter;
     }
 }

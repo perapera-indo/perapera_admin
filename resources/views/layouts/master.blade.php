@@ -340,6 +340,116 @@
 
         $('[data-toggle="tooltip"]').tooltip()
     });
+
+
+    const asyncIntervals = [];
+    const runAsyncInterval = async (cb, interval, intervalIndex) => {
+        await cb(intervalIndex)
+        if (asyncIntervals[intervalIndex]) {
+            setTimeout(() => runAsyncInterval(cb, interval, intervalIndex), interval)
+        }
+    };
+    const setAsyncInterval = (cb, interval) => {
+        if (cb && typeof cb === "function") {
+            const intervalIndex = asyncIntervals.length
+            asyncIntervals.push(true)
+            runAsyncInterval(cb, interval, intervalIndex)
+            return intervalIndex
+        } else {
+            throw new Error('Callback must be a function')
+        }
+    };
+    const clearAsyncInterval = (intervalIndex) => {
+        if (asyncIntervals[intervalIndex]) {
+            asyncIntervals[intervalIndex] = false
+        }
+    };
+
+    const onExist = (str,complete=()=>{},limit=5000)=>{
+        const interval = 100
+        let current = 0
+        let id = setAsyncInterval(async (index) => {
+            if(current>=limit){
+                clearAsyncInterval(index)
+                return
+            }
+
+            current+=interval
+
+            if($(str).length<=0){ return }
+
+            complete()
+
+            clearAsyncInterval(index)
+        }, interval)
+    }
+
+    const hasClass = (str,cls,limit=5000)=>{
+        const interval = 100
+        let res = false
+        let current = 0
+        let id = setAsyncInterval(async (index) => {
+            if(current>=limit){
+                clearAsyncInterval(index)
+                return false
+            }
+            current+=interval
+            if(!$(str).hasClass(cls)){ return false }
+            clearAsyncInterval(index)
+            res = true
+            return true
+        }, interval)
+        return res
+    }
+
+    const setCustomFilterDatatable = (params)=>{
+        let siModule = setInterval(() => {
+            let section = params.section,
+                filter = params.filter,
+                cloned = ""
+
+            // check if section exist
+            if(section.length<=0){ return }
+
+            // clone original
+            cloned = filter.clone().removeClass("hidden")
+
+            // remove original
+            filter.remove()
+
+            // paste cloned
+            section.html(cloned)
+
+            typeof params.complete == "function" ? params.complete(cloned,section) :()=>{}
+
+            clearInterval(siModule)
+        }, 100)
+    }
+
+    const resizeSelect2FilterDatatable = (select, section)=>{
+        var parent = parseInt(section.css("width").replaceAll("px"))
+        var text = parseInt(select.prev().css("width").replaceAll("px"))
+        var right = parseInt(section.css("padding-right").replaceAll("px"))
+        select.next()
+            .css("width",(parent-text-right)+"px")
+            .css("max-width",(parent-text-right)+"px")
+    }
+
+    const triggerFilterOrDrawDatatable = (table,select,state,stateKey)=>{
+        var table = $(`#${table}`)
+        var options = select.find("option:not(:disabled)")
+        var value = state!=null && state[stateKey]!=null ? state[stateKey] : $(options[0]).attr("value")
+        select.val(value).trigger('change')
+        if(select.val()==null && options.length>0){
+            select.val($(options[0]).attr("value")).trigger('change')
+        }else if(options.length<=0 || select.val()!=value){
+            table.DataTable().search($(`#${table.attr("id")}_filter input`).val()).draw()
+        }
+    }
+
+    $.fn.dataTable.ext.errMode = function ( settings, helpPage, message ) {
+        toastr.error(message,"Error",{timeOut: 10000})
+    }
 </script>
 @yield('scripts')
 </body>

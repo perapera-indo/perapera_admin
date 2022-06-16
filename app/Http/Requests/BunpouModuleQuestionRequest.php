@@ -26,6 +26,8 @@ class BunpouModuleQuestionRequest extends FormRequest
     {
         return [
             'question' => 'required',
+            'test' => 'required',
+            'time' => 'required',
         ];
     }
 

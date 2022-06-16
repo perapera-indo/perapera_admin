@@ -13,6 +13,7 @@ class BunpouModuleQuestionRepository
         $question->question = $data['question'];
         $question->test = $data['test'];
         $question->order = $data['order'];
+        $question->time = $data['time'];
 
         if (!empty($data['question-image'])) {
             $uploadImage = upload_file($data['question-image'], 'uploads/bunpou/module/images/', 'image');
@@ -39,6 +40,14 @@ class BunpouModuleQuestionRepository
 
         if(array_key_exists("order",$data)){
             $question->order = $data['order'];
+        }
+
+        if(array_key_exists("time",$data)){
+            $question->time = $data['time'];
+        }
+
+        if(array_key_exists("test",$data)){
+            $question->test = $data['test'];
         }
 
         if(array_key_exists("question-image",$data)){
