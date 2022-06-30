@@ -60,8 +60,8 @@ Route::group(['middleware' => ['sentinelAuth','checkAccess'],'namespace' => 'Adm
     Route::resource('letter-courses', 'A\LetterCourseController')->except('show');
     Route::resource('letter-questions', 'A\LetterCourseQuestionController')->except('show');
 
-    Route::get('letters/hiragana/list', 'A\LetterController@categoryindex')->name('letter-hiragana-list');
-    Route::get('letters/katakana/list', 'A\LetterController@categoryindex')->name('letter-katakana-list');
+    Route::get('letters/1/index', 'A\LetterController@categoryindex')->name('letter-hiragana-list');
+    Route::get('letters/2/index', 'A\LetterController@categoryindex')->name('letter-katakana-list');
     Route::get('letters/{cid}/add', 'A\LetterController@newcreate')->name('letter-cat-get-add');
     Route::post('letters/{cid}/add', 'A\LetterController@categorystore')->name('letter-cat-add');
     Route::get('letters/{letter_category_id}/edit/{id}', 'A\LetterController@categoryedit')->name('letter-cat-edit');
