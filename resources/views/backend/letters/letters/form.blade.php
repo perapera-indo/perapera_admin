@@ -74,14 +74,14 @@ $title = @$data ? 'Edit' : 'Tambah';
                                 <div class="col-md-6">
                                     <div class="form-group input-group">
                                         <label for="exampleInputFile">Image</label>
-                                        <input type="file" class="form-control {{ hasErrorField($errors,'image_url') }} dropify" data-errors-position="outside" name="image_url" data-default-file="{{ env('CLOUD_S3_URL') . @$data->image_url }}"
+                                        <input type="file" class="form-control {{ hasErrorField($errors,'image_url') }} dropify" data-errors-position="outside" name="image_url" data-default-file="{{ asset(@$data->image_url) }}"
                                                data-height="150" data-max-file-size="5M" data-allowed-file-extensions="jpg jpeg png gif">
                                     </div>
                                     {!! $errors->first('image_url', '<label class="help-block error-validation">:message</label>') !!}
 
                                     <div class="form-group input-group">
                                         <label for="exampleInputFile2">Color Image</label>
-                                        <input type="file" class="form-control {{ hasErrorField($errors,'color_image_url') }} dropify" data-errors-position="outside" name="color_image_url" data-default-file="{{ env('CLOUD_S3_URL') . @$data->color_image_url }}"
+                                        <input type="file" class="form-control {{ hasErrorField($errors,'color_image_url') }} dropify" data-errors-position="outside" name="color_image_url" data-default-file="{{ asset(@$data->color_image_url) }}"
                                                data-height="150" data-max-file-size="5M" data-allowed-file-extensions="jpg jpeg png gif">
                                     </div>
                                     {!! $errors->first('color_image_url', '<label class="help-block error-validation">:message</label>') !!}
