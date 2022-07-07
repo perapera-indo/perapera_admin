@@ -70,6 +70,12 @@ $title = @$data ? 'Edit' : 'Tambah';
                                         </select>
                                         {!! $errors->first('is_active', '<label class="help-block error-validation">:message</label>') !!}
                                     </div>
+
+                                    <div class="form-group">
+                                        <label for="desc">Deskripsi</label>
+                                        <textarea name="desc" id="desc" class="form-control" resize="vertical">{{ old('desc') ?? @$data->desc }}</textarea>
+                                        {!! $errors->first('total_stroke', '<label class="help-block error-validation">:message</label>') !!}
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group input-group">
