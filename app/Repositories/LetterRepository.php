@@ -11,7 +11,7 @@ class LetterRepository
     {
         $letter = new Letter;
 
-        $url = $data['category']=="1" ? "uploads/katakana" : "uploads/hiragana";
+        $url = $data['category']=="2" ? "uploads/katakana" : "uploads/hiragana";
 
         if (!empty($data['color_image_url'])) {
             $uploadImage = upload_file($data['color_image_url'], $url, 'image');
@@ -41,7 +41,7 @@ class LetterRepository
 
         $letter = Letter::find($id);
 
-        $url = $data['category']=="1" ? "uploads/katakana" : "uploads/hiragana";
+        $url = $data['category']=="2" ? "uploads/katakana" : "uploads/hiragana";
 
         if (!empty($data['color_image_url'])) {
             $uploadImage = upload_file($data['color_image_url'], $url, 'image');
