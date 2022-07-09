@@ -186,7 +186,13 @@ class LetterController extends Controller
         $saveData = $this->repository->updateLetter($param, $id);
         flashDataAfterSave($saveData, $this->moduleName);
 
-        return redirect()->route($this->redirectAfterSave);
+        if ($param['category'] == 1) {
+            return redirect()->route($this->redirectAfterSave1);
+        } elseif ($param['category'] == 2) {
+            return redirect()->route($this->redirectAfterSave2);
+        } else {
+            return redirect()->route($this->redirectAfterSave);
+        }
     }
 
     /**

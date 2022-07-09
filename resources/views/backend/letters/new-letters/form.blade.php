@@ -87,6 +87,17 @@ $title = @$data ? 'Edit' : 'Tambah';
                                             data-allowed-file-extensions="jpg jpeg png gif">
                                     </div>
                                     {!! $errors->first('color_image_url', '<label class="help-block error-validation">:message</label>') !!}
+
+                                    <div class="form-group input-group">
+                                        <label class="w-100">
+                                            Audio
+                                            @if($title!="Tambah" && $data->audio!=null)
+                                                <a href="{{ asset($data->audio) }}" target="_blank" class="pull-right">Current Audio</a>
+                                            @endif
+                                        </label>
+                                        <input type="file" class="form-control" name="audio" accept="audio/*"/>
+                                        {!! $errors->first('audio', '<label class="help-block error-validation">:message</label>') !!}
+                                    </div>
                                 </div>
                             </div>
 

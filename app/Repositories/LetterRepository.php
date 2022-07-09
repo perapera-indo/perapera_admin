@@ -23,6 +23,11 @@ class LetterRepository
             $letter->image_url = $uploadImage['original'];
         }
 
+        if (!empty($data['audio'])) {
+            $uploadImage = upload_file($data['audio'], $url, 'audio');
+            $letter->audio = $uploadImage['original'];
+        }
+
 
         $letter->code = Str::random(10);
         $letter->letter = $data['letter'];
@@ -51,6 +56,11 @@ class LetterRepository
         if (!empty($data['image_url'])) {
             $uploadImage = upload_file($data['image_url'], $url, 'image');
             $letter->image_url = $uploadImage['original'];
+        }
+
+        if (!empty($data['audio'])) {
+            $uploadImage = upload_file($data['audio'], $url, 'audio');
+            $letter->audio = $uploadImage['original'];
         }
 
         $letter->letter = $data['letter'];
