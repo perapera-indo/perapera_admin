@@ -1,35 +1,35 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Suuji;
 
-use App\Http\Requests\RoomRequest;
-use App\Models\Room;
-use App\Repositories\RoomRepository;
+use App\Http\Requests\SuujiModulesRequest;
+use App\Models\SuujiModules;
+use App\Repositories\SuujiModulesRepository;
 use App\Http\Controllers\Controller;
-use App\DataTables\RoomDatatable;
+use App\DataTables\SuujiModulesDatatable;
 
-class RoomController extends Controller
+class SuujiModulesController extends Controller
 {
 
-    protected $model, $repository;
+    protected $repository, $module;
 
     public function __construct()
     {
-        $this->model = new Room();
-        $this->repository = new RoomRepository();
+        $this->module = new SuujiModules();
+        $this->repository = new SuujiModulesRepository();
     }
 
-    protected $redirectAfterSave = 'room.index';
-    protected $moduleName = 'Room';
+    protected $redirectAfterSave = 'suuji.module.index';
+    protected $moduleName = 'Suuji Module';
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(RoomDatatable $dataTable)
+    public function index(SuujiModulesDatatable $dataTable)
     {
-        return $dataTable->render('backend.room.index');
+        return $dataTable->render('backend.suuji.module.index');
     }
 
     /**
@@ -39,7 +39,7 @@ class RoomController extends Controller
      */
     public function create()
     {
-        return view('backend.room.form');
+        return view('backend.suuji.module.form');
     }
 
     /**
@@ -48,14 +48,13 @@ class RoomController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(RoomRequest $request)
+    public function store(SuujiModulesRequest $request)
     {
         $param = $request->all();
         $saveData = $this->repository->create($param);
         flashDataAfterSave($saveData,$this->moduleName);
 
         return redirect()->route($this->redirectAfterSave);
-
     }
 
     /**
@@ -66,21 +65,7 @@ class RoomController extends Controller
      */
     public function show($id)
     {
-        $data = $this->model->data($id)->firstOrFail();
-
-        // is image or video
-        $fn = $data->path;
-        $type = "";
-        $mimetype = "";
-        if($fn!=null){
-            $mime = finfo_open(FILEINFO_MIME);
-            $mimetype = finfo_file($mime,$fn);
-            $mimetype = substr($mimetype, 0, strpos($mimetype, ';'));
-            $type = explode("/",$mimetype)[0];
-            finfo_close($mime);
-        }
-
-        return view('backend.room.show', compact('data','type','mimetype'));
+        //
     }
 
     /**
@@ -91,10 +76,9 @@ class RoomController extends Controller
      */
     public function edit($id)
     {
+        $data = $this->module->data($id)->firstOrFail();
 
-        $data = $this->model->data($id)->firstOrFail();
-
-        return view('backend.room.form', compact('data'));
+        return view('backend.suuji.module.form',compact("data"));
     }
 
     /**
@@ -104,10 +88,10 @@ class RoomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(RoomRequest $request, $id)
+    public function update(SuujiModulesRequest $request, $id)
     {
         $param = $request->all();
-        $saveData = $this->repository->update($param, $id);
+        $saveData = $this->repository->update($id,$param);
         flashDataAfterSave($saveData,$this->moduleName);
 
         return redirect()->route($this->redirectAfterSave);
@@ -122,5 +106,15 @@ class RoomController extends Controller
     public function destroy($id)
     {
         return $this->repository->delete($id);
+    }
+
+    public function activate($id)
+    {
+        return $this->repository->activate($id);
+    }
+
+    public function deactivate($id)
+    {
+        return $this->repository->deactivate($id);
     }
 }

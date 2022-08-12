@@ -122,7 +122,7 @@ class BunpouParticleController extends Controller
     public function destroy($id)
     {
         $particle = $this->particle->data($id)->firstOrFail();
-        $detail = $this->detail->data("test",$particle->test)->first();
+        $detail = $this->detail->data("particle",$particle->id)->first();
         if($detail!=null){
             return "false";
         }

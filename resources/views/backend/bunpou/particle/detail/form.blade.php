@@ -88,8 +88,8 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="sentence_romaji">Kalimnat Romaji</label>
-                                        <textarea class="form-control" name="sentence_romaji" id="sentence_romaji" rows="4" placeholder="Kalimnat Romaji"
+                                        <label for="sentence_romaji">Kalimat Romaji</label>
+                                        <textarea class="form-control" name="sentence_romaji" id="sentence_romaji" rows="4" placeholder="Kalimat Romaji"
                                             required value="">{{ old('sentence_romaji') ?? @$data->sentence_romaji }}</textarea>
 
                                         {!! $errors->first('sentence_romaji', '<label class="help-block error-validation">:message</label>') !!}

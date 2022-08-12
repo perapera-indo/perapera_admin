@@ -44,6 +44,10 @@
                                     <source src="{{ asset($data->path) }}" type="{{$mimetype}}">
                                 </video>
                             </div>
+                        @else
+                            <div class="col-md-12">
+                                <label for="path">No Image/Video Uploaded</label>
+                            </div>
                         @endif
                     </div>
 

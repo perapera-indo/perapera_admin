@@ -11,9 +11,9 @@
             <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        @isPermitted('bunpou.intro.create')
+                        @isPermitted('suuji.intro.create')
                         <div class="form-group">
-                            <a href="{{ route('bunpou.intro.create') }}" type="button" class="btn btn-outline-info btn-rounded btn-fw btn-sm">
+                            <a href="{{ route('suuji.intro.create') }}" type="button" class="btn btn-outline-info btn-rounded btn-fw btn-sm">
                                 <i class="mdi mdi-plus-circle btn-icon-prepend"></i> Tambah
                             </a>
                         </div>

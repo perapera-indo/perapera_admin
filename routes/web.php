@@ -70,6 +70,7 @@ Route::group(['middleware' => ['sentinelAuth','checkAccess'],'namespace' => 'Adm
     Route::resource('letters/hiragana', 'A\LetterController')->except('show');
     Route::resource('letters/katakana', 'A\LetterController')->except('show');
 
+    // Bunpou Group
     Route::group(['namespace'=>'Bunpou', 'prefix' =>'bunpou', 'as'=>'bunpou.'], function () {
         Route::resource('intro', 'BunpouController')->except('show');
 
@@ -125,6 +126,26 @@ Route::group(['middleware' => ['sentinelAuth','checkAccess'],'namespace' => 'Adm
             Route::resource('question', 'BunpouParticleQuestionController')->except('show');
         });
         Route::resource('particle', 'BunpouParticleController')->except('show');
+    });
+
+    // Suuji Group
+    Route::group(['namespace'=>'Suuji', 'prefix' =>'suuji', 'as'=>'suuji.'], function () {
+        Route::resource('intro', 'SuujiController')->except('show');
+
+        Route::group(['prefix' =>'module', 'as'=>'module.'], function () {
+            Route::put('{id}/activate', 'SuujiModulesController@activate')->name('activate');
+            Route::put('{id}/deactivate', 'SuujiModulesController@deactivate')->name('deactivate');
+
+            Route::resource('test', 'SuujiModuleTestController')->except('show');
+            Route::group(['prefix' =>'test', 'as'=>'test.'], function () {
+                Route::put('{id}/deactivate', 'SuujiModuleTestController@deactivate')->name('deactivate');
+                Route::put('{id}/activate', 'SuujiModuleTestController@activate')->name('activate');
+                Route::get('{module}/module', 'SuujiModuleTestController@module')->name('module');
+            });
+
+            Route::resource('question', 'SuujiModuleQuestionController')->except('show');
+        });
+        Route::resource('module', 'SuujiModulesController');
     });
 
     // Route::resource('verb-levels', 'B\MasterVerbLevelController')->except('show');

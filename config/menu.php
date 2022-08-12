@@ -119,6 +119,24 @@ return [
             ],
         ]
     ],
+    'suuji' => [
+        'title' => 'Suuji',
+        'routeName' => 'suuji.intro.index',
+        'additional_query' => '',
+        'icon' => 'mdi mdi-comment-text-outline menu-icon',
+        'sub_menu' => [
+            'intro' => [
+                'title' => 'Introduction',
+                'routeName' => 'suuji.intro.index',
+                'icon' => 'mdi mdi-flag menu-icon',
+            ],
+            'modules' => [
+                'title' => 'Modules',
+                'routeName' => 'suuji.module.index',
+                'icon' => 'mdi mdi-flag menu-icon',
+            ],
+        ]
+    ],
     // 'room-2' => [
     //     'title' => 'Room 2',
     //     'routeName' => 'vocabularies.index',
